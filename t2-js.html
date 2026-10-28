@@ -1,0 +1,266 @@
+<!DOCTYPE html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>task2.js · Защита Assignment 5</title><style>*{box-sizing:border-box}body{margin:0;font:16px/1.65 "Segoe UI",system-ui,sans-serif;background:#0d1024;color:#e6e9ff}
+a{color:#8fa0ff}code{background:#232850;padding:1px 6px;border-radius:6px;color:#7ff0d4;font-size:.9em}
+.app{display:grid;grid-template-columns:270px minmax(0,1fr);min-height:100vh}
+nav{background:#12163a;padding:20px 14px;position:sticky;top:0;height:100vh;overflow:auto;border-right:1px solid #262b5c}
+nav h4{margin:18px 8px 6px;font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:#7b84c9}
+nav a{display:block;padding:7px 12px;border-radius:10px;color:#cdd3ff;text-decoration:none}nav a:hover{background:#1e2452}
+nav a.on{background:linear-gradient(90deg,#5468ff,#8a5cff);color:#fff}
+main{padding:32px clamp(16px,4vw,56px);max-width:1000px;overflow-wrap:anywhere}
+h1{font-size:2rem;margin:0 0 6px;background:linear-gradient(90deg,#8fa0ff,#7ff0d4);-webkit-background-clip:text;background-clip:text;color:transparent}
+h2{margin:30px 0 8px;color:#fff}.lead{color:#a9b1e8}
+.hero{padding:30px;border-radius:20px;background:linear-gradient(135deg,#3a4bd8,#8a5cff 60%,#12b5a0);margin-bottom:24px}.hero h1{background:none;color:#fff;-webkit-text-fill-color:#fff}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px}
+.card{background:#161a40;border:1px solid #262b5c;border-radius:16px;padding:16px;transition:.15s}.card:hover{transform:translateY(-3px);border-color:#5468ff}
+.card h3{margin:0 0 6px}.tag{display:inline-block;font-size:.75rem;padding:2px 10px;border-radius:99px;background:#2a3070;color:#bcc5ff;margin:2px}
+.blk{background:#141838;border:1px solid #262b5c;border-radius:16px;margin:20px 0;overflow:hidden}
+.blk h3{margin:0;padding:12px 16px;background:#1a1f4a}.blk small{color:#8d96d8;font-weight:400}
+pre{margin:0;padding:14px 0;overflow-x:auto;font:13px/1.6 Consolas,Menlo,monospace;background:#0a0d20;color:#d7dcff}
+.ln{display:inline-block;width:3.4em;text-align:right;padding-right:14px;color:#566;user-select:none}
+.ex{margin:0;padding:12px 16px 12px 34px;border-top:1px solid #262b5c}.ex li{margin:5px 0}
+.box{border-left:4px solid #7ff0d4;background:#12223a;padding:10px 16px;border-radius:0 12px 12px 0;margin:12px 0}
+.warn{border-color:#ffb703;background:#2a2410}
+@media(max-width:800px){.app{grid-template-columns:minmax(0,1fr)}nav{position:static;height:auto}}</style></head><body><div class="app"><nav><a href="index.html">🏠 Главная</a><a href="basics.html">🧠 Основы с нуля</a><h4>Задание 1 · Битва</h4><a href="t1.html">Обзор</a><a href="t1-html.html">task1.html</a><a href="t1-js.html">task1.js</a><h4>Задание 2 · Канбан</h4><a href="t2.html">Обзор</a><a href="t2-html.html">task2.html</a><a href="t2-js.html" class="on">task2.js</a><h4>Задание 3 · Форма</h4><a href="t3.html">Обзор</a><a href="t3-html.html">task3.html</a><a href="t3-js.html">task3.js</a><h4>Общий стиль</h4><a href="css.html">style.css</a><h4>Подготовка</h4><a href="live.html">⚡ Live coding</a><a href="tips.html">💡 Лайфхаки</a></nav><main><h1>task2.js</h1><p class="lead">Данные → render() → страница.</p><section class="blk"><h3>1. Константы и данные <small>строки 1–23</small></h3><pre><span class="ln">1</span>&#x27;use strict&#x27;;
+<span class="ln">2</span>
+<span class="ln">3</span>// ===== Constants =====
+<span class="ln">4</span>const STATUSES = [&#x27;todo&#x27;, &#x27;doing&#x27;, &#x27;done&#x27;];
+<span class="ln">5</span>const STATUS_TITLES = { todo: &#x27;To do&#x27;, doing: &#x27;In progress&#x27;, done: &#x27;Done&#x27; };
+<span class="ln">6</span>const WIP_LIMIT = 3; // max cards in &quot;In progress&quot;
+<span class="ln">7</span>const PRIORITY_LABELS = { 1: &#x27;Low&#x27;, 2: &#x27;Medium&#x27;, 3: &#x27;High&#x27; };
+<span class="ln">8</span>
+<span class="ln">9</span>// ===== Data: the HTML has only empty containers =====
+<span class="ln">10</span>const cards = [
+<span class="ln">11</span>  { id: 1,  title: &#x27;Sketch wireframes&#x27;,        tag: &#x27;design&#x27;,      priority: 2, hours: 2, urgent: false, status: &#x27;done&#x27; },
+<span class="ln">12</span>  { id: 2,  title: &#x27;Choose color palette&#x27;,     tag: &#x27;design&#x27;,      priority: 1, hours: 1, urgent: false, status: &#x27;done&#x27; },
+<span class="ln">13</span>  { id: 3,  title: &#x27;Write HTML structure&#x27;,     tag: &#x27;html&#x27;,        priority: 3, hours: 3, urgent: true,  status: &#x27;done&#x27; },
+<span class="ln">14</span>  { id: 4,  title: &#x27;Style header and footer&#x27;,  tag: &#x27;css&#x27;,         priority: 2, hours: 2, urgent: false, status: &#x27;done&#x27; },
+<span class="ln">15</span>  { id: 5,  title: &#x27;Build responsive grid&#x27;,    tag: &#x27;css&#x27;,         priority: 3, hours: 4, urgent: true,  status: &#x27;doing&#x27; },
+<span class="ln">16</span>  { id: 6,  title: &#x27;Add contact form&#x27;,         tag: &#x27;html&#x27;,        priority: 2, hours: 3, urgent: false, status: &#x27;doing&#x27; },
+<span class="ln">17</span>  { id: 7,  title: &#x27;Write form validation&#x27;,    tag: &#x27;js&#x27;,          priority: 3, hours: 5, urgent: true,  status: &#x27;todo&#x27; },
+<span class="ln">18</span>  { id: 8,  title: &#x27;Optimize images&#x27;,          tag: &#x27;performance&#x27;, priority: 1, hours: 2, urgent: false, status: &#x27;todo&#x27; },
+<span class="ln">19</span>  { id: 9,  title: &#x27;Add dark theme toggle&#x27;,    tag: &#x27;js&#x27;,          priority: 1, hours: 2, urgent: false, status: &#x27;todo&#x27; },
+<span class="ln">20</span>  { id: 10, title: &#x27;Test at 375px and 1280px&#x27;, tag: &#x27;testing&#x27;,     priority: 2, hours: 1, urgent: false, status: &#x27;todo&#x27; },
+<span class="ln">21</span>  { id: 11, title: &#x27;Fix accessibility issues&#x27;, tag: &#x27;a11y&#x27;,        priority: 3, hours: 3, urgent: true,  status: &#x27;todo&#x27; },
+<span class="ln">22</span>  { id: 12, title: &#x27;Write README&#x27;,             tag: &#x27;docs&#x27;,        priority: 1, hours: 1, urgent: false, status: &#x27;todo&#x27; },
+<span class="ln">23</span>];
+</pre><ul class="ex"><li><code>WIP_LIMIT = 3</code>: лимит колонки</li><li><code>cards</code>: 12 объектов; свойства разных типов: число, строка, булево</li><li><code>status</code> решает, в какой колонке карточка</li></ul></section><section class="blk"><h3>2. Состояние интерфейса <small>строки 25–38</small></h3><pre><span class="ln">25</span>// ===== UI state (filters + message) =====
+<span class="ln">26</span>const state = { tag: &#x27;all&#x27;, query: &#x27;&#x27;, sort: &#x27;none&#x27;, message: &#x27;&#x27;, messageType: &#x27;&#x27; };
+<span class="ln">27</span>
+<span class="ln">28</span>const els = {
+<span class="ln">29</span>  board: document.getElementById(&#x27;board&#x27;),
+<span class="ln">30</span>  search: document.getElementById(&#x27;search&#x27;),
+<span class="ln">31</span>  tag: document.getElementById(&#x27;filter-tag&#x27;),
+<span class="ln">32</span>  sort: document.getElementById(&#x27;sort&#x27;),
+<span class="ln">33</span>  reset: document.getElementById(&#x27;reset-filters&#x27;),
+<span class="ln">34</span>  progress: document.getElementById(&#x27;progress&#x27;),
+<span class="ln">35</span>  progressText: document.getElementById(&#x27;progress-text&#x27;),
+<span class="ln">36</span>  message: document.getElementById(&#x27;message&#x27;),
+<span class="ln">37</span>  emptyBoard: document.getElementById(&#x27;empty-board&#x27;),
+<span class="ln">38</span>};
+</pre><ul class="ex"><li><code>state</code> хранит фильтр, поиск, сортировку, сообщение</li><li><code>els</code>: ссылки на элементы</li></ul></section><section class="blk"><h3>3. Свои циклы <small>строки 40–63</small></h3><pre><span class="ln">40</span>// ===== Calculations with my own loops =====
+<span class="ln">41</span>function countByStatus(status) {
+<span class="ln">42</span>  let count = 0;
+<span class="ln">43</span>  for (const card of cards) {
+<span class="ln">44</span>    if (card.status === status) count += 1;
+<span class="ln">45</span>  }
+<span class="ln">46</span>  return count;
+<span class="ln">47</span>}
+<span class="ln">48</span>
+<span class="ln">49</span>function hoursLeft() {
+<span class="ln">50</span>  let sum = 0;
+<span class="ln">51</span>  for (const card of cards) {
+<span class="ln">52</span>    if (card.status !== &#x27;done&#x27;) sum += card.hours;
+<span class="ln">53</span>  }
+<span class="ln">54</span>  return sum;
+<span class="ln">55</span>}
+<span class="ln">56</span>
+<span class="ln">57</span>function getTags() {
+<span class="ln">58</span>  const tags = [];
+<span class="ln">59</span>  for (const card of cards) {
+<span class="ln">60</span>    if (!tags.includes(card.tag)) tags.push(card.tag);
+<span class="ln">61</span>  }
+<span class="ln">62</span>  return tags.sort();
+<span class="ln">63</span>}
+</pre><ul class="ex"><li><code>countByStatus</code>: счётчик в цикле <code>for…of</code></li><li><code>hoursLeft</code>: сумма часов невыполненных</li><li><code>getTags</code>: уникальные теги через <code>includes</code></li></ul></section><section class="blk"><h3>4. Фильтр и сортировка <small>строки 65–78</small></h3><pre><span class="ln">65</span>// ===== Filtering and sorting (returns a new array, data is not changed) =====
+<span class="ln">66</span>function getVisibleCards() {
+<span class="ln">67</span>  const query = state.query.trim().toLowerCase();
+<span class="ln">68</span>  const result = [];
+<span class="ln">69</span>  for (const card of cards) {
+<span class="ln">70</span>    const matchesTag = state.tag === &#x27;all&#x27; || card.tag === state.tag;
+<span class="ln">71</span>    const matchesQuery = query === &#x27;&#x27; || card.title.toLowerCase().includes(query);
+<span class="ln">72</span>    if (matchesTag &amp;&amp; matchesQuery) result.push(card);
+<span class="ln">73</span>  }
+<span class="ln">74</span>  if (state.sort === &#x27;high&#x27;) result.sort((a, b) =&gt; b.priority - a.priority || a.id - b.id);
+<span class="ln">75</span>  else if (state.sort === &#x27;low&#x27;) result.sort((a, b) =&gt; a.priority - b.priority || a.id - b.id);
+<span class="ln">76</span>  else result.sort((a, b) =&gt; a.id - b.id);
+<span class="ln">77</span>  return result;
+<span class="ln">78</span>}
+</pre><ul class="ex"><li>Собираем новый массив <code>result</code>: оригинал не трогаем</li><li><code>&amp;&amp;</code>: карточка нужна, если подходит и тег, и текст</li><li><code>sort((a,b)=>b.priority-a.priority)</code>: от большего к меньшему</li></ul></section><section class="blk"><h3>5. Действие moveCard <small>строки 80–105</small></h3><pre><span class="ln">80</span>// ===== Actions (change the array first, then render) =====
+<span class="ln">81</span>function setMessage(text, type) {
+<span class="ln">82</span>  state.message = text;
+<span class="ln">83</span>  state.messageType = type;
+<span class="ln">84</span>}
+<span class="ln">85</span>
+<span class="ln">86</span>function moveCard(id, direction) {
+<span class="ln">87</span>  const card = cards.find((c) =&gt; c.id === id);
+<span class="ln">88</span>  if (!card) return;
+<span class="ln">89</span>  const target = STATUSES[STATUSES.indexOf(card.status) + direction];
+<span class="ln">90</span>  if (!target) return;
+<span class="ln">91</span>
+<span class="ln">92</span>  // Rule: &quot;In progress&quot; holds at most WIP_LIMIT cards
+<span class="ln">93</span>  if (target === &#x27;doing&#x27; &amp;&amp; countByStatus(&#x27;doing&#x27;) &gt;= WIP_LIMIT) {
+<span class="ln">94</span>    setMessage(
+<span class="ln">95</span>      `Cannot move &quot;${card.title}&quot; to ${STATUS_TITLES.doing}: the column already has ${WIP_LIMIT} cards. Finish one first.`,
+<span class="ln">96</span>      &#x27;error&#x27;
+<span class="ln">97</span>    );
+<span class="ln">98</span>    render();
+<span class="ln">99</span>    return;
+<span class="ln">100</span>  }
+<span class="ln">101</span>
+<span class="ln">102</span>  card.status = target;
+<span class="ln">103</span>  setMessage(`Moved &quot;${card.title}&quot; to ${STATUS_TITLES[target]}.`, &#x27;ok&#x27;);
+<span class="ln">104</span>  render();
+<span class="ln">105</span>}
+</pre><ul class="ex"><li><code>find</code> ищет карточку по id</li><li><code>STATUSES.indexOf(...)+direction</code>: следующая или прошлая колонка</li><li>Правило лимита → сообщение, render(), <code>return</code></li><li>Иначе меняем <code>card.status</code> и зовём render()</li></ul></section><section class="blk"><h3>6. Создание карточки <small>строки 107–156</small></h3><pre><span class="ln">107</span>// ===== Rendering =====
+<span class="ln">108</span>function createButton(text, action, card, label, disabled) {
+<span class="ln">109</span>  const btn = document.createElement(&#x27;button&#x27;);
+<span class="ln">110</span>  btn.type = &#x27;button&#x27;;
+<span class="ln">111</span>  btn.className = &#x27;btn btn-secondary btn-small&#x27;;
+<span class="ln">112</span>  btn.textContent = text;
+<span class="ln">113</span>  btn.dataset.action = action;
+<span class="ln">114</span>  btn.dataset.id = String(card.id);
+<span class="ln">115</span>  btn.setAttribute(&#x27;aria-label&#x27;, label);
+<span class="ln">116</span>  btn.disabled = disabled;
+<span class="ln">117</span>  return btn;
+<span class="ln">118</span>}
+<span class="ln">119</span>
+<span class="ln">120</span>function createCard(card) {
+<span class="ln">121</span>  const li = document.createElement(&#x27;li&#x27;);
+<span class="ln">122</span>  li.className = `card priority-${card.priority}`;
+<span class="ln">123</span>  li.classList.toggle(&#x27;is-done&#x27;, card.status === &#x27;done&#x27;);
+<span class="ln">124</span>
+<span class="ln">125</span>  const title = document.createElement(&#x27;h3&#x27;);
+<span class="ln">126</span>  title.textContent = card.title;
+<span class="ln">127</span>
+<span class="ln">128</span>  const meta = document.createElement(&#x27;p&#x27;);
+<span class="ln">129</span>  meta.className = &#x27;meta&#x27;;
+<span class="ln">130</span>  const parts = [`#${card.tag}`, `${PRIORITY_LABELS[card.priority]} priority`, `${card.hours} h`];
+<span class="ln">131</span>  for (const text of parts) {
+<span class="ln">132</span>    const chip = document.createElement(&#x27;span&#x27;);
+<span class="ln">133</span>    chip.className = &#x27;chip&#x27;;
+<span class="ln">134</span>    chip.textContent = text;
+<span class="ln">135</span>    meta.append(chip);
+<span class="ln">136</span>  }
+<span class="ln">137</span>  if (card.urgent) {
+<span class="ln">138</span>    const chip = document.createElement(&#x27;span&#x27;);
+<span class="ln">139</span>    chip.className = &#x27;chip urgent&#x27;;
+<span class="ln">140</span>    chip.textContent = &#x27;Urgent&#x27;;
+<span class="ln">141</span>    meta.append(chip);
+<span class="ln">142</span>  }
+<span class="ln">143</span>
+<span class="ln">144</span>  const index = STATUSES.indexOf(card.status);
+<span class="ln">145</span>  const actions = document.createElement(&#x27;div&#x27;);
+<span class="ln">146</span>  actions.className = &#x27;card-actions&#x27;;
+<span class="ln">147</span>  const prev = STATUSES[index - 1];
+<span class="ln">148</span>  const next = STATUSES[index + 1];
+<span class="ln">149</span>  actions.append(
+<span class="ln">150</span>    createButton(&#x27;← Back&#x27;, &#x27;back&#x27;, card, prev ? `Move &quot;${card.title}&quot; to ${STATUS_TITLES[prev]}` : &#x27;Cannot go back&#x27;, !prev),
+<span class="ln">151</span>    createButton(&#x27;Next →&#x27;, &#x27;next&#x27;, card, next ? `Move &quot;${card.title}&quot; to ${STATUS_TITLES[next]}` : &#x27;Already done&#x27;, !next)
+<span class="ln">152</span>  );
+<span class="ln">153</span>
+<span class="ln">154</span>  li.append(title, meta, actions);
+<span class="ln">155</span>  return li;
+<span class="ln">156</span>}
+</pre><ul class="ex"><li><code>createElement</code> + <code>textContent</code>: безопасно, без innerHTML</li><li><code>dataset.action</code>, <code>dataset.id</code>: метки для делегирования</li><li><code>disabled</code> у «Back» в первой колонке и «Next» в последней</li></ul></section><section class="blk"><h3>7. Рисование всей страницы <small>строки 158–227</small></h3><pre><span class="ln">158</span>function renderFilterOptions() {
+<span class="ln">159</span>  const tags = getTags();
+<span class="ln">160</span>  if (state.tag !== &#x27;all&#x27; &amp;&amp; !tags.includes(state.tag)) state.tag = &#x27;all&#x27;;
+<span class="ln">161</span>  els.tag.replaceChildren();
+<span class="ln">162</span>  for (const value of [&#x27;all&#x27;, ...tags]) {
+<span class="ln">163</span>    const option = document.createElement(&#x27;option&#x27;);
+<span class="ln">164</span>    option.value = value;
+<span class="ln">165</span>    option.textContent = value === &#x27;all&#x27; ? &#x27;All tags&#x27; : value;
+<span class="ln">166</span>    els.tag.append(option);
+<span class="ln">167</span>  }
+<span class="ln">168</span>  els.tag.value = state.tag;
+<span class="ln">169</span>}
+<span class="ln">170</span>
+<span class="ln">171</span>function renderProgress() {
+<span class="ln">172</span>  const done = countByStatus(&#x27;done&#x27;);
+<span class="ln">173</span>  const percent = cards.length === 0 ? 0 : Math.round((done / cards.length) * 100);
+<span class="ln">174</span>  els.progress.max = Math.max(cards.length, 1);
+<span class="ln">175</span>  els.progress.value = done;
+<span class="ln">176</span>  els.progressText.textContent = `${done} of ${cards.length} cards finished (${percent}%). Hours left: ${hoursLeft()}.`;
+<span class="ln">177</span>}
+<span class="ln">178</span>
+<span class="ln">179</span>function renderBoard(visible) {
+<span class="ln">180</span>  els.board.replaceChildren();
+<span class="ln">181</span>  for (const status of STATUSES) {
+<span class="ln">182</span>    const column = document.createElement(&#x27;section&#x27;);
+<span class="ln">183</span>    column.className = &#x27;column&#x27;;
+<span class="ln">184</span>    const total = countByStatus(status);
+<span class="ln">185</span>    const isLimited = status === &#x27;doing&#x27;;
+<span class="ln">186</span>    column.classList.toggle(&#x27;is-full&#x27;, isLimited &amp;&amp; total &gt;= WIP_LIMIT);
+<span class="ln">187</span>
+<span class="ln">188</span>    const heading = document.createElement(&#x27;h2&#x27;);
+<span class="ln">189</span>    const name = document.createElement(&#x27;span&#x27;);
+<span class="ln">190</span>    name.textContent = STATUS_TITLES[status];
+<span class="ln">191</span>    const count = document.createElement(&#x27;span&#x27;);
+<span class="ln">192</span>    count.textContent = isLimited ? `${total}/${WIP_LIMIT}` : String(total);
+<span class="ln">193</span>    heading.append(name, count);
+<span class="ln">194</span>
+<span class="ln">195</span>    const list = document.createElement(&#x27;ul&#x27;);
+<span class="ln">196</span>    list.className = &#x27;card-list&#x27;;
+<span class="ln">197</span>    let shown = 0;
+<span class="ln">198</span>    for (const card of visible) {
+<span class="ln">199</span>      if (card.status !== status) continue;
+<span class="ln">200</span>      list.append(createCard(card));
+<span class="ln">201</span>      shown += 1;
+<span class="ln">202</span>    }
+<span class="ln">203</span>    if (shown === 0) {
+<span class="ln">204</span>      const empty = document.createElement(&#x27;li&#x27;);
+<span class="ln">205</span>      empty.className = &#x27;empty-note&#x27;;
+<span class="ln">206</span>      empty.textContent = &#x27;No cards here&#x27;;
+<span class="ln">207</span>      list.append(empty);
+<span class="ln">208</span>    }
+<span class="ln">209</span>    column.append(heading, list);
+<span class="ln">210</span>    els.board.append(column);
+<span class="ln">211</span>  }
+<span class="ln">212</span>}
+<span class="ln">213</span>
+<span class="ln">214</span>function render() {
+<span class="ln">215</span>  const visible = getVisibleCards();
+<span class="ln">216</span>  renderFilterOptions();
+<span class="ln">217</span>  renderProgress();
+<span class="ln">218</span>  renderBoard(visible);
+<span class="ln">219</span>
+<span class="ln">220</span>  els.message.textContent = state.message;
+<span class="ln">221</span>  els.message.className = &#x27;message&#x27; + (state.messageType ? &#x27; &#x27; + state.messageType : &#x27;&#x27;);
+<span class="ln">222</span>
+<span class="ln">223</span>  els.emptyBoard.hidden = visible.length &gt; 0;
+<span class="ln">224</span>  if (visible.length === 0) {
+<span class="ln">225</span>    els.emptyBoard.textContent = &#x27;Nothing found. Try another word or reset the filters.&#x27;;
+<span class="ln">226</span>  }
+<span class="ln">227</span>}
+</pre><ul class="ex"><li><code>renderBoard</code>: для каждого статуса строим колонку и кладём карточки</li><li>Если карточек нет: «No cards here»</li><li><code>render()</code>: фильтры → прогресс → доска → сообщение; «Nothing found», если ничего не подошло</li></ul></section><section class="blk"><h3>8. События <small>строки 229–251</small></h3><pre><span class="ln">229</span>// ===== Events =====
+<span class="ln">230</span>// One listener on the container for all card buttons (event delegation)
+<span class="ln">231</span>els.board.addEventListener(&#x27;click&#x27;, (event) =&gt; {
+<span class="ln">232</span>  const btn = event.target.closest(&#x27;button[data-action]&#x27;);
+<span class="ln">233</span>  if (!btn) return;
+<span class="ln">234</span>  const id = Number(btn.dataset.id);
+<span class="ln">235</span>  moveCard(id, btn.dataset.action === &#x27;next&#x27; ? 1 : -1);
+<span class="ln">236</span>});
+<span class="ln">237</span>
+<span class="ln">238</span>els.search.addEventListener(&#x27;input&#x27;, () =&gt; { state.query = els.search.value; setMessage(&#x27;&#x27;, &#x27;&#x27;); render(); });
+<span class="ln">239</span>els.tag.addEventListener(&#x27;change&#x27;, () =&gt; { state.tag = els.tag.value; setMessage(&#x27;&#x27;, &#x27;&#x27;); render(); });
+<span class="ln">240</span>els.sort.addEventListener(&#x27;change&#x27;, () =&gt; { state.sort = els.sort.value; setMessage(&#x27;&#x27;, &#x27;&#x27;); render(); });
+<span class="ln">241</span>els.reset.addEventListener(&#x27;click&#x27;, () =&gt; {
+<span class="ln">242</span>  state.tag = &#x27;all&#x27;;
+<span class="ln">243</span>  state.query = &#x27;&#x27;;
+<span class="ln">244</span>  state.sort = &#x27;none&#x27;;
+<span class="ln">245</span>  els.search.value = &#x27;&#x27;;
+<span class="ln">246</span>  els.sort.value = &#x27;none&#x27;;
+<span class="ln">247</span>  setMessage(&#x27;&#x27;, &#x27;&#x27;);
+<span class="ln">248</span>  render();
+<span class="ln">249</span>});
+<span class="ln">250</span>
+<span class="ln">251</span>render();
+</pre><ul class="ex"><li>Делегирование: один <code>click</code> на <code>els.board</code></li><li>Поиск (<code>input</code>), тег и сортировка (<code>change</code>) обновляют state и зовут render()</li></ul></section></main></div></body></html>

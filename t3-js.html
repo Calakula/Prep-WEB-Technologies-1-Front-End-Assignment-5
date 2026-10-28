@@ -1,0 +1,331 @@
+<!DOCTYPE html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>task3.js · Защита Assignment 5</title><style>*{box-sizing:border-box}body{margin:0;font:16px/1.65 "Segoe UI",system-ui,sans-serif;background:#0d1024;color:#e6e9ff}
+a{color:#8fa0ff}code{background:#232850;padding:1px 6px;border-radius:6px;color:#7ff0d4;font-size:.9em}
+.app{display:grid;grid-template-columns:270px minmax(0,1fr);min-height:100vh}
+nav{background:#12163a;padding:20px 14px;position:sticky;top:0;height:100vh;overflow:auto;border-right:1px solid #262b5c}
+nav h4{margin:18px 8px 6px;font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:#7b84c9}
+nav a{display:block;padding:7px 12px;border-radius:10px;color:#cdd3ff;text-decoration:none}nav a:hover{background:#1e2452}
+nav a.on{background:linear-gradient(90deg,#5468ff,#8a5cff);color:#fff}
+main{padding:32px clamp(16px,4vw,56px);max-width:1000px;overflow-wrap:anywhere}
+h1{font-size:2rem;margin:0 0 6px;background:linear-gradient(90deg,#8fa0ff,#7ff0d4);-webkit-background-clip:text;background-clip:text;color:transparent}
+h2{margin:30px 0 8px;color:#fff}.lead{color:#a9b1e8}
+.hero{padding:30px;border-radius:20px;background:linear-gradient(135deg,#3a4bd8,#8a5cff 60%,#12b5a0);margin-bottom:24px}.hero h1{background:none;color:#fff;-webkit-text-fill-color:#fff}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px}
+.card{background:#161a40;border:1px solid #262b5c;border-radius:16px;padding:16px;transition:.15s}.card:hover{transform:translateY(-3px);border-color:#5468ff}
+.card h3{margin:0 0 6px}.tag{display:inline-block;font-size:.75rem;padding:2px 10px;border-radius:99px;background:#2a3070;color:#bcc5ff;margin:2px}
+.blk{background:#141838;border:1px solid #262b5c;border-radius:16px;margin:20px 0;overflow:hidden}
+.blk h3{margin:0;padding:12px 16px;background:#1a1f4a}.blk small{color:#8d96d8;font-weight:400}
+pre{margin:0;padding:14px 0;overflow-x:auto;font:13px/1.6 Consolas,Menlo,monospace;background:#0a0d20;color:#d7dcff}
+.ln{display:inline-block;width:3.4em;text-align:right;padding-right:14px;color:#566;user-select:none}
+.ex{margin:0;padding:12px 16px 12px 34px;border-top:1px solid #262b5c}.ex li{margin:5px 0}
+.box{border-left:4px solid #7ff0d4;background:#12223a;padding:10px 16px;border-radius:0 12px 12px 0;margin:12px 0}
+.warn{border-color:#ffb703;background:#2a2410}
+@media(max-width:800px){.app{grid-template-columns:minmax(0,1fr)}nav{position:static;height:auto}}</style></head><body><div class="app"><nav><a href="index.html">🏠 Главная</a><a href="basics.html">🧠 Основы с нуля</a><h4>Задание 1 · Битва</h4><a href="t1.html">Обзор</a><a href="t1-html.html">task1.html</a><a href="t1-js.html">task1.js</a><h4>Задание 2 · Канбан</h4><a href="t2.html">Обзор</a><a href="t2-html.html">task2.html</a><a href="t2-js.html">task2.js</a><h4>Задание 3 · Форма</h4><a href="t3.html">Обзор</a><a href="t3-html.html">task3.html</a><a href="t3-js.html" class="on">task3.js</a><h4>Общий стиль</h4><a href="css.html">style.css</a><h4>Подготовка</h4><a href="live.html">⚡ Live coding</a><a href="tips.html">💡 Лайфхаки</a></nav><main><h1>task3.js</h1><p class="lead">Самый большой файл. Идём по частям.</p><section class="blk"><h3>1. Константы и данные <small>строки 1–36</small></h3><pre><span class="ln">1</span>&#x27;use strict&#x27;;
+<span class="ln">2</span>
+<span class="ln">3</span>// ===== Constants and data =====
+<span class="ln">4</span>const CURRENCY = &#x27;₸&#x27;;
+<span class="ln">5</span>const BOOKING_PREFIX = &#x27;AITU&#x27;;
+<span class="ln">6</span>const BOOKING_ALPHABET = &#x27;ABCDEFGHJKLMNPQRSTUVWXYZ23456789&#x27;;
+<span class="ln">7</span>const BOOKING_LENGTH = 6;
+<span class="ln">8</span>const BLOCKED_EMAIL_DOMAINS = [&#x27;mailinator.com&#x27;, &#x27;tempmail.com&#x27;, &#x27;10minutemail.com&#x27;];
+<span class="ln">9</span>
+<span class="ln">10</span>const events = [
+<span class="ln">11</span>  { id: &#x27;jazz&#x27;, name: &#x27;Astana Jazz Night&#x27;, dates: [
+<span class="ln">12</span>    { date: &#x27;2026-11-14&#x27;, soldOut: false },
+<span class="ln">13</span>    { date: &#x27;2026-11-15&#x27;, soldOut: true },
+<span class="ln">14</span>    { date: &#x27;2026-11-21&#x27;, soldOut: false } ] },
+<span class="ln">15</span>  { id: &#x27;tech&#x27;, name: &#x27;Tech Talk: AI Today&#x27;, dates: [
+<span class="ln">16</span>    { date: &#x27;2026-11-18&#x27;, soldOut: false },
+<span class="ln">17</span>    { date: &#x27;2026-11-25&#x27;, soldOut: true },
+<span class="ln">18</span>    { date: &#x27;2026-12-02&#x27;, soldOut: false } ] },
+<span class="ln">19</span>  { id: &#x27;opera&#x27;, name: &#x27;Opera Gala&#x27;, dates: [
+<span class="ln">20</span>    { date: &#x27;2026-12-05&#x27;, soldOut: false },
+<span class="ln">21</span>    { date: &#x27;2026-12-06&#x27;, soldOut: false },
+<span class="ln">22</span>    { date: &#x27;2026-12-12&#x27;, soldOut: true } ] },
+<span class="ln">23</span>];
+<span class="ln">24</span>
+<span class="ln">25</span>// seatsLeft changes after every successful booking
+<span class="ln">26</span>const ticketTypes = [
+<span class="ln">27</span>  { id: &#x27;standard&#x27;, label: &#x27;Standard&#x27;, price: 5000,  seatsLeft: 12 },
+<span class="ln">28</span>  { id: &#x27;vip&#x27;,      label: &#x27;VIP&#x27;,      price: 15000, seatsLeft: 4 },
+<span class="ln">29</span>  { id: &#x27;student&#x27;,  label: &#x27;Student&#x27;,  price: 3000,  seatsLeft: 8 },
+<span class="ln">30</span>];
+<span class="ln">31</span>
+<span class="ln">32</span>const promoCodes = [
+<span class="ln">33</span>  { code: &#x27;AITU10&#x27;, discount: 10 },
+<span class="ln">34</span>  { code: &#x27;STUDENT20&#x27;, discount: 20 },
+<span class="ln">35</span>  { code: &#x27;HACK2026&#x27;, discount: 30 },
+<span class="ln">36</span>];
+</pre><ul class="ex"><li>Массивы объектов: <code>events</code> (даты, soldOut), <code>ticketTypes</code> (seatsLeft), <code>promoCodes</code></li></ul></section><section class="blk"><h3>2. Ссылки на элементы <small>строки 38–60</small></h3><pre><span class="ln">38</span>// ===== DOM =====
+<span class="ln">39</span>const form = document.getElementById(&#x27;ticket-form&#x27;);
+<span class="ln">40</span>form.noValidate = true; // turns off only the browser messages, checkValidity() still works
+<span class="ln">41</span>
+<span class="ln">42</span>const FIELD_NAMES = [&#x27;event&#x27;, &#x27;date&#x27;, &#x27;type&#x27;, &#x27;quantity&#x27;, &#x27;fullName&#x27;, &#x27;email&#x27;, &#x27;promo&#x27;];
+<span class="ln">43</span>const LABELS = {
+<span class="ln">44</span>  event: &#x27;Event&#x27;, date: &#x27;Date&#x27;, type: &#x27;Ticket type&#x27;, quantity: &#x27;Quantity&#x27;,
+<span class="ln">45</span>  fullName: &#x27;Full name&#x27;, email: &#x27;Email&#x27;, promo: &#x27;Promo code&#x27;,
+<span class="ln">46</span>};
+<span class="ln">47</span>const fields = {};
+<span class="ln">48</span>const errorEls = {};
+<span class="ln">49</span>for (const name of FIELD_NAMES) {
+<span class="ln">50</span>  fields[name] = document.getElementById(&#x27;f-&#x27; + name);
+<span class="ln">51</span>  errorEls[name] = document.getElementById(&#x27;err-&#x27; + name);
+<span class="ln">52</span>}
+<span class="ln">53</span>const summary = document.getElementById(&#x27;summary&#x27;);
+<span class="ln">54</span>const preview = document.getElementById(&#x27;preview&#x27;);
+<span class="ln">55</span>const result = document.getElementById(&#x27;result&#x27;);
+<span class="ln">56</span>const dateHint = document.getElementById(&#x27;hint-date&#x27;);
+<span class="ln">57</span>const DATE_HINT_DEFAULT = dateHint.textContent;
+<span class="ln">58</span>
+<span class="ln">59</span>// When one field changes, these fields depend on it and must be re-checked
+<span class="ln">60</span>const DEPENDENTS = { event: [&#x27;date&#x27;], type: [&#x27;quantity&#x27;] };
+</pre><ul class="ex"><li><code>form.noValidate = true</code></li><li>Циклом собираем <code>fields</code> и <code>errorEls</code> по имени</li><li><code>DEPENDENTS</code>: какие поля перепроверять при изменении другого</li></ul></section><section class="blk"><h3>3. Помощники и список опций <small>строки 62–97</small></h3><pre><span class="ln">62</span>// ===== Helpers =====
+<span class="ln">63</span>function randomInt(min, max) {
+<span class="ln">64</span>  return Math.floor(Math.random() * (max - min + 1)) + min;
+<span class="ln">65</span>}
+<span class="ln">66</span>function getEvent() { return events.find((e) =&gt; e.id === fields.event.value); }
+<span class="ln">67</span>function getType() { return ticketTypes.find((t) =&gt; t.id === fields.type.value); }
+<span class="ln">68</span>function findPromo(value) {
+<span class="ln">69</span>  return promoCodes.find((p) =&gt; p.code === value.trim().toUpperCase());
+<span class="ln">70</span>}
+<span class="ln">71</span>function formatMoney(value) {
+<span class="ln">72</span>  return `${value.toLocaleString(&#x27;en-US&#x27;)} ${CURRENCY}`;
+<span class="ln">73</span>}
+<span class="ln">74</span>
+<span class="ln">75</span>// ===== Options built from arrays =====
+<span class="ln">76</span>function buildEventOptions() {
+<span class="ln">77</span>  fields.event.replaceChildren(new Option(&#x27;Choose an event...&#x27;, &#x27;&#x27;));
+<span class="ln">78</span>  for (const ev of events) fields.event.append(new Option(ev.name, ev.id));
+<span class="ln">79</span>}
+<span class="ln">80</span>function buildTypeOptions() {
+<span class="ln">81</span>  fields.type.replaceChildren(new Option(&#x27;Choose a ticket type...&#x27;, &#x27;&#x27;));
+<span class="ln">82</span>  for (const t of ticketTypes) {
+<span class="ln">83</span>    const text = t.seatsLeft === 0
+<span class="ln">84</span>      ? `${t.label} - sold out`
+<span class="ln">85</span>      : `${t.label} - ${formatMoney(t.price)} (${t.seatsLeft} left)`;
+<span class="ln">86</span>    const option = new Option(text, t.id);
+<span class="ln">87</span>    option.disabled = t.seatsLeft === 0;
+<span class="ln">88</span>    fields.type.append(option);
+<span class="ln">89</span>  }
+<span class="ln">90</span>}
+<span class="ln">91</span>function updateDateHint() {
+<span class="ln">92</span>  const ev = getEvent();
+<span class="ln">93</span>  if (!ev) { dateHint.textContent = DATE_HINT_DEFAULT; return; }
+<span class="ln">94</span>  const parts = [];
+<span class="ln">95</span>  for (const slot of ev.dates) parts.push(slot.soldOut ? `${slot.date} (sold out)` : slot.date);
+<span class="ln">96</span>  dateHint.textContent = `Dates: ${parts.join(&#x27;, &#x27;)}`;
+<span class="ln">97</span>}
+</pre><ul class="ex"><li><code>find</code> по массиву: событие, тип, промокод</li><li><code>new Option(text, value)</code> создаёт <code>&lt;option&gt;</code></li><li>Если мест 0, опция <code>disabled</code></li></ul></section><section class="blk"><h3>4. Свои правила <small>строки 99–135</small></h3><pre><span class="ln">99</span>// ===== Custom rules (what HTML attributes cannot express) =====
+<span class="ln">100</span>// Each rule returns an error text, or &#x27;&#x27; when the value is correct
+<span class="ln">101</span>const rules = {
+<span class="ln">102</span>  date(value) {
+<span class="ln">103</span>    const ev = getEvent();
+<span class="ln">104</span>    if (!ev) return &#x27;Choose an event first.&#x27;;
+<span class="ln">105</span>    const slot = ev.dates.find((d) =&gt; d.date === value);
+<span class="ln">106</span>    if (!slot) return `&quot;${ev.name}&quot; is not held on this date. Check the dates under the field.`;
+<span class="ln">107</span>    if (slot.soldOut) return &#x27;This date is sold out. Choose another date.&#x27;;
+<span class="ln">108</span>    return &#x27;&#x27;;
+<span class="ln">109</span>  },
+<span class="ln">110</span>  quantity(value) {
+<span class="ln">111</span>    const type = getType();
+<span class="ln">112</span>    if (!type) return &#x27;Choose a ticket type first.&#x27;;
+<span class="ln">113</span>    if (type.seatsLeft === 0) return `${type.label} tickets are sold out.`;
+<span class="ln">114</span>    if (Number(value) &gt; type.seatsLeft) return `Only ${type.seatsLeft} ${type.label} seats left.`;
+<span class="ln">115</span>    return &#x27;&#x27;;
+<span class="ln">116</span>  },
+<span class="ln">117</span>  fullName(value) {
+<span class="ln">118</span>    // at least two words, letters only (hyphen and apostrophe allowed)
+<span class="ln">119</span>    if (!/^\p{L}[\p{L}&#x27;-]*(\s+\p{L}[\p{L}&#x27;-]*)+$/u.test(value)) {
+<span class="ln">120</span>      return &#x27;Enter first and last name using letters only, e.g. &quot;Ravil Maratov&quot;.&#x27;;
+<span class="ln">121</span>    }
+<span class="ln">122</span>    return &#x27;&#x27;;
+<span class="ln">123</span>  },
+<span class="ln">124</span>  email(value) {
+<span class="ln">125</span>    const domain = value.split(&#x27;@&#x27;)[1] || &#x27;&#x27;;
+<span class="ln">126</span>    if (BLOCKED_EMAIL_DOMAINS.includes(domain.toLowerCase())) {
+<span class="ln">127</span>      return &#x27;Temporary email addresses are not accepted. Use your real email.&#x27;;
+<span class="ln">128</span>    }
+<span class="ln">129</span>    return &#x27;&#x27;;
+<span class="ln">130</span>  },
+<span class="ln">131</span>  promo(value) {
+<span class="ln">132</span>    if (value !== &#x27;&#x27; &amp;&amp; !findPromo(value)) return &#x27;Unknown promo code.&#x27;;
+<span class="ln">133</span>    return &#x27;&#x27;;
+<span class="ln">134</span>  },
+<span class="ln">135</span>};
+</pre><ul class="ex"><li>Каждое правило возвращает текст ошибки или пустую строку</li><li>Имя: регулярка <code>\p{L}</code> (любые буквы) и ≥2 слова</li><li>Почта: домен не из <code>BLOCKED_EMAIL_DOMAINS</code></li></ul></section><section class="blk"><h3>5. Свои тексты вместо браузерных <small>строки 137–149</small></h3><pre><span class="ln">137</span>// Own messages instead of the browser ones
+<span class="ln">138</span>function nativeMessage(field, label) {
+<span class="ln">139</span>  const v = field.validity;
+<span class="ln">140</span>  if (v.valueMissing) return `${label} is required.`;
+<span class="ln">141</span>  if (v.typeMismatch) return &#x27;Enter a valid email address, e.g. name@example.com.&#x27;;
+<span class="ln">142</span>  if (v.tooShort) return `${label} must have at least ${field.minLength} characters.`;
+<span class="ln">143</span>  if (v.tooLong) return `${label} must have at most ${field.maxLength} characters.`;
+<span class="ln">144</span>  if (v.rangeUnderflow) return `Minimum value is ${field.min}.`;
+<span class="ln">145</span>  if (v.rangeOverflow) return `You can buy at most ${field.max} tickets per order.`;
+<span class="ln">146</span>  if (v.stepMismatch || v.badInput) return &#x27;Enter a whole number.&#x27;;
+<span class="ln">147</span>  if (v.patternMismatch) return `${label} may contain only letters and digits.`;
+<span class="ln">148</span>  return &#x27;Invalid value.&#x27;;
+<span class="ln">149</span>}
+</pre><ul class="ex"><li><code>field.validity</code>: флаги <code>valueMissing</code>, <code>typeMismatch</code>, <code>rangeOverflow</code> и др.</li></ul></section><section class="blk"><h3>6. validateField <small>строки 151–182</small></h3><pre><span class="ln">151</span>// ===== Validation =====
+<span class="ln">152</span>function validateField(name, show = true) {
+<span class="ln">153</span>  const field = fields[name];
+<span class="ln">154</span>  const value = field.value.trim();
+<span class="ln">155</span>  field.setCustomValidity(&#x27;&#x27;);          // clear the old custom message first
+<span class="ln">156</span>  let message = &#x27;&#x27;;
+<span class="ln">157</span>  if (!field.validity.valid) {
+<span class="ln">158</span>    message = nativeMessage(field, LABELS[name]);
+<span class="ln">159</span>  } else if (rules[name]) {
+<span class="ln">160</span>    message = rules[name](value);
+<span class="ln">161</span>  }
+<span class="ln">162</span>  if (message) field.setCustomValidity(message); // checkValidity() now agrees with us
+<span class="ln">163</span>  if (show) showFieldState(name, message);
+<span class="ln">164</span>  return message;
+<span class="ln">165</span>}
+<span class="ln">166</span>
+<span class="ln">167</span>function showFieldState(name, message) {
+<span class="ln">168</span>  const field = fields[name];
+<span class="ln">169</span>  errorEls[name].textContent = message;
+<span class="ln">170</span>  field.setAttribute(&#x27;aria-invalid&#x27;, message ? &#x27;true&#x27; : &#x27;false&#x27;);
+<span class="ln">171</span>  field.classList.toggle(&#x27;is-invalid&#x27;, message !== &#x27;&#x27;);
+<span class="ln">172</span>  field.classList.toggle(&#x27;is-valid&#x27;, message === &#x27;&#x27; &amp;&amp; field.value.trim() !== &#x27;&#x27;);
+<span class="ln">173</span>}
+<span class="ln">174</span>
+<span class="ln">175</span>function clearFieldState(name) {
+<span class="ln">176</span>  const field = fields[name];
+<span class="ln">177</span>  delete field.dataset.touched;
+<span class="ln">178</span>  field.removeAttribute(&#x27;aria-invalid&#x27;);
+<span class="ln">179</span>  field.classList.remove(&#x27;is-invalid&#x27;, &#x27;is-valid&#x27;);
+<span class="ln">180</span>  field.setCustomValidity(&#x27;&#x27;);
+<span class="ln">181</span>  errorEls[name].textContent = &#x27;&#x27;;
+<span class="ln">182</span>}
+</pre><ul class="ex"><li>Сначала <code>setCustomValidity("")</code>: сброс старой ошибки</li><li>Если браузерная проверка не пройдена → её текст, иначе наше правило</li><li><code>aria-invalid</code> и классы <code>is-invalid</code>/<code>is-valid</code> показывают результат</li></ul></section><section class="blk"><h3>7. Живой предпросмотр <small>строки 184–217</small></h3><pre><span class="ln">184</span>// ===== Live preview =====
+<span class="ln">185</span>function addRow(list, label, value) {
+<span class="ln">186</span>  const dt = document.createElement(&#x27;dt&#x27;);
+<span class="ln">187</span>  dt.textContent = label;
+<span class="ln">188</span>  const dd = document.createElement(&#x27;dd&#x27;);
+<span class="ln">189</span>  dd.textContent = value;
+<span class="ln">190</span>  list.append(dt, dd);
+<span class="ln">191</span>}
+<span class="ln">192</span>
+<span class="ln">193</span>function getTotals() {
+<span class="ln">194</span>  const type = getType();
+<span class="ln">195</span>  const quantity = Number(fields.quantity.value);
+<span class="ln">196</span>  const promo = findPromo(fields.promo.value);
+<span class="ln">197</span>  if (!type || !(quantity &gt; 0)) return null;
+<span class="ln">198</span>  const subtotal = type.price * quantity;
+<span class="ln">199</span>  const discount = promo ? promo.discount : 0;
+<span class="ln">200</span>  return { subtotal, discount, total: Math.round(subtotal * (100 - discount) / 100) };
+<span class="ln">201</span>}
+<span class="ln">202</span>
+<span class="ln">203</span>function renderPreview() {
+<span class="ln">204</span>  const ev = getEvent();
+<span class="ln">205</span>  const type = getType();
+<span class="ln">206</span>  const totals = getTotals();
+<span class="ln">207</span>  const list = document.createElement(&#x27;dl&#x27;);
+<span class="ln">208</span>  addRow(list, &#x27;Event&#x27;, ev ? ev.name : &#x27;—&#x27;);
+<span class="ln">209</span>  addRow(list, &#x27;Date&#x27;, fields.date.value || &#x27;—&#x27;);
+<span class="ln">210</span>  addRow(list, &#x27;Type&#x27;, type ? type.label : &#x27;—&#x27;);
+<span class="ln">211</span>  addRow(list, &#x27;Quantity&#x27;, fields.quantity.value || &#x27;—&#x27;);
+<span class="ln">212</span>  addRow(list, &#x27;Name&#x27;, fields.fullName.value.trim() || &#x27;—&#x27;);
+<span class="ln">213</span>  addRow(list, &#x27;Email&#x27;, fields.email.value.trim() || &#x27;—&#x27;);
+<span class="ln">214</span>  addRow(list, &#x27;Discount&#x27;, totals &amp;&amp; totals.discount &gt; 0 ? `-${totals.discount}%` : &#x27;—&#x27;);
+<span class="ln">215</span>  addRow(list, &#x27;Total&#x27;, totals ? formatMoney(totals.total) : &#x27;—&#x27;);
+<span class="ln">216</span>  preview.replaceChildren(list);
+<span class="ln">217</span>}
+</pre><ul class="ex"><li><code>getTotals</code>: цена × количество, минус скидка промокода</li><li><code>renderPreview</code> каждый раз строит список заново</li></ul></section><section class="blk"><h3>8. События формы <small>строки 219–267</small></h3><pre><span class="ln">219</span>// ===== Events =====
+<span class="ln">220</span>for (const name of FIELD_NAMES) {
+<span class="ln">221</span>  const field = fields[name];
+<span class="ln">222</span>
+<span class="ln">223</span>  // blur: the field becomes &quot;touched&quot; and is checked for the first time
+<span class="ln">224</span>  field.addEventListener(&#x27;blur&#x27;, () =&gt; {
+<span class="ln">225</span>    field.dataset.touched = &#x27;true&#x27;;
+<span class="ln">226</span>    validateField(name);
+<span class="ln">227</span>  });
+<span class="ln">228</span>
+<span class="ln">229</span>  // input: preview always updates; the check runs only after the first blur
+<span class="ln">230</span>  field.addEventListener(&#x27;input&#x27;, () =&gt; {
+<span class="ln">231</span>    if (name === &#x27;event&#x27;) updateDateHint();
+<span class="ln">232</span>    if (field.dataset.touched === &#x27;true&#x27;) validateField(name);
+<span class="ln">233</span>    for (const dep of DEPENDENTS[name] || []) {
+<span class="ln">234</span>      if (fields[dep].dataset.touched === &#x27;true&#x27;) validateField(dep);
+<span class="ln">235</span>    }
+<span class="ln">236</span>    renderPreview();
+<span class="ln">237</span>  });
+<span class="ln">238</span>}
+<span class="ln">239</span>
+<span class="ln">240</span>form.addEventListener(&#x27;submit&#x27;, (event) =&gt; {
+<span class="ln">241</span>  event.preventDefault();
+<span class="ln">242</span>  const invalid = [];
+<span class="ln">243</span>  for (const name of FIELD_NAMES) {
+<span class="ln">244</span>    fields[name].dataset.touched = &#x27;true&#x27;;
+<span class="ln">245</span>    if (validateField(name)) invalid.push(name);
+<span class="ln">246</span>  }
+<span class="ln">247</span>
+<span class="ln">248</span>  if (invalid.length &gt; 0) {
+<span class="ln">249</span>    summary.textContent = `The form has ${invalid.length} error${invalid.length === 1 ? &#x27;&#x27; : &#x27;s&#x27;}. Please fix the marked fields.`;
+<span class="ln">250</span>    summary.hidden = false;
+<span class="ln">251</span>    fields[invalid[0]].focus();
+<span class="ln">252</span>    return;
+<span class="ln">253</span>  }
+<span class="ln">254</span>
+<span class="ln">255</span>  summary.hidden = true;
+<span class="ln">256</span>  createTicket();
+<span class="ln">257</span>});
+<span class="ln">258</span>
+<span class="ln">259</span>form.addEventListener(&#x27;reset&#x27;, () =&gt; {
+<span class="ln">260</span>  // wait until the browser has cleared the values
+<span class="ln">261</span>  setTimeout(() =&gt; {
+<span class="ln">262</span>    for (const name of FIELD_NAMES) clearFieldState(name);
+<span class="ln">263</span>    summary.hidden = true;
+<span class="ln">264</span>    updateDateHint();
+<span class="ln">265</span>    renderPreview();
+<span class="ln">266</span>  }, 0);
+<span class="ln">267</span>});
+</pre><ul class="ex"><li><code>blur</code>: помечаем поле «тронутым» и проверяем</li><li><code>input</code>: предпросмотр всегда, проверка только если поле тронуто, плюс зависимые поля</li><li><code>submit</code>: <code>preventDefault()</code>, проверяем все; при ошибках счётчик и <code>focus()</code> на первом</li><li><code>reset</code>: чистим состояния полей</li></ul></section><section class="blk"><h3>9. Итоговый билет <small>строки 269–312</small></h3><pre><span class="ln">269</span>// ===== Final result =====
+<span class="ln">270</span>function createBookingCode() {
+<span class="ln">271</span>  let code = &#x27;&#x27;;
+<span class="ln">272</span>  for (let i = 0; i &lt; BOOKING_LENGTH; i += 1) {
+<span class="ln">273</span>    code += BOOKING_ALPHABET[randomInt(0, BOOKING_ALPHABET.length - 1)];
+<span class="ln">274</span>  }
+<span class="ln">275</span>  return `${BOOKING_PREFIX}-${code}`;
+<span class="ln">276</span>}
+<span class="ln">277</span>
+<span class="ln">278</span>function createTicket() {
+<span class="ln">279</span>  const ev = getEvent();
+<span class="ln">280</span>  const type = getType();
+<span class="ln">281</span>  const quantity = Number(fields.quantity.value);
+<span class="ln">282</span>  const totals = getTotals();
+<span class="ln">283</span>  const data = {
+<span class="ln">284</span>    event: ev.name, date: fields.date.value, type: type.label, quantity,
+<span class="ln">285</span>    name: fields.fullName.value.trim(), email: fields.email.value.trim(),
+<span class="ln">286</span>    discount: totals.discount, total: totals.total,
+<span class="ln">287</span>  };
+<span class="ln">288</span>
+<span class="ln">289</span>  type.seatsLeft -= quantity; // the seats are really taken
+<span class="ln">290</span>
+<span class="ln">291</span>  const ticket = document.createElement(&#x27;article&#x27;);
+<span class="ln">292</span>  ticket.className = &#x27;ticket final&#x27;;
+<span class="ln">293</span>  ticket.tabIndex = -1;
+<span class="ln">294</span>  const title = document.createElement(&#x27;h2&#x27;);
+<span class="ln">295</span>  title.textContent = &#x27;Booking confirmed&#x27;;
+<span class="ln">296</span>  const list = document.createElement(&#x27;dl&#x27;);
+<span class="ln">297</span>  addRow(list, &#x27;Event&#x27;, data.event);
+<span class="ln">298</span>  addRow(list, &#x27;Date&#x27;, data.date);
+<span class="ln">299</span>  addRow(list, &#x27;Tickets&#x27;, `${data.quantity} × ${data.type}`);
+<span class="ln">300</span>  addRow(list, &#x27;Name&#x27;, data.name);
+<span class="ln">301</span>  addRow(list, &#x27;Email&#x27;, data.email);
+<span class="ln">302</span>  addRow(list, &#x27;Paid&#x27;, formatMoney(data.total) + (data.discount &gt; 0 ? ` (-${data.discount}%)` : &#x27;&#x27;));
+<span class="ln">303</span>  const code = document.createElement(&#x27;p&#x27;);
+<span class="ln">304</span>  code.className = &#x27;code&#x27;;
+<span class="ln">305</span>  code.textContent = createBookingCode();
+<span class="ln">306</span>  ticket.append(title, list, code);
+<span class="ln">307</span>  result.replaceChildren(ticket);
+<span class="ln">308</span>
+<span class="ln">309</span>  form.reset();           // the reset listener clears states and the preview
+<span class="ln">310</span>  buildTypeOptions();     // show the new seats left
+<span class="ln">311</span>  ticket.focus();
+<span class="ln">312</span>}
+</pre><ul class="ex"><li>Код брони: <code>randomInt</code> по алфавиту ×6</li><li><code>seatsLeft -= quantity</code>: места реально занимаются</li><li>Билет строится через DOM; <code>form.reset()</code> и перестройка опций</li></ul></section><section class="blk"><h3>10. Старт <small>строки 314–318</small></h3><pre><span class="ln">314</span>// ===== Start =====
+<span class="ln">315</span>buildEventOptions();
+<span class="ln">316</span>buildTypeOptions();
+<span class="ln">317</span>updateDateHint();
+<span class="ln">318</span>renderPreview();
+</pre><ul class="ex"><li>Строим опции, подсказку и предпросмотр при загрузке</li></ul></section></main></div></body></html>

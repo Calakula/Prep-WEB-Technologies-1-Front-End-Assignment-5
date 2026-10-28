@@ -1,0 +1,22 @@
+<!DOCTYPE html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Задание 2 · Канбан-доска · Защита Assignment 5</title><style>*{box-sizing:border-box}body{margin:0;font:16px/1.65 "Segoe UI",system-ui,sans-serif;background:#0d1024;color:#e6e9ff}
+a{color:#8fa0ff}code{background:#232850;padding:1px 6px;border-radius:6px;color:#7ff0d4;font-size:.9em}
+.app{display:grid;grid-template-columns:270px minmax(0,1fr);min-height:100vh}
+nav{background:#12163a;padding:20px 14px;position:sticky;top:0;height:100vh;overflow:auto;border-right:1px solid #262b5c}
+nav h4{margin:18px 8px 6px;font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:#7b84c9}
+nav a{display:block;padding:7px 12px;border-radius:10px;color:#cdd3ff;text-decoration:none}nav a:hover{background:#1e2452}
+nav a.on{background:linear-gradient(90deg,#5468ff,#8a5cff);color:#fff}
+main{padding:32px clamp(16px,4vw,56px);max-width:1000px;overflow-wrap:anywhere}
+h1{font-size:2rem;margin:0 0 6px;background:linear-gradient(90deg,#8fa0ff,#7ff0d4);-webkit-background-clip:text;background-clip:text;color:transparent}
+h2{margin:30px 0 8px;color:#fff}.lead{color:#a9b1e8}
+.hero{padding:30px;border-radius:20px;background:linear-gradient(135deg,#3a4bd8,#8a5cff 60%,#12b5a0);margin-bottom:24px}.hero h1{background:none;color:#fff;-webkit-text-fill-color:#fff}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px}
+.card{background:#161a40;border:1px solid #262b5c;border-radius:16px;padding:16px;transition:.15s}.card:hover{transform:translateY(-3px);border-color:#5468ff}
+.card h3{margin:0 0 6px}.tag{display:inline-block;font-size:.75rem;padding:2px 10px;border-radius:99px;background:#2a3070;color:#bcc5ff;margin:2px}
+.blk{background:#141838;border:1px solid #262b5c;border-radius:16px;margin:20px 0;overflow:hidden}
+.blk h3{margin:0;padding:12px 16px;background:#1a1f4a}.blk small{color:#8d96d8;font-weight:400}
+pre{margin:0;padding:14px 0;overflow-x:auto;font:13px/1.6 Consolas,Menlo,monospace;background:#0a0d20;color:#d7dcff}
+.ln{display:inline-block;width:3.4em;text-align:right;padding-right:14px;color:#566;user-select:none}
+.ex{margin:0;padding:12px 16px 12px 34px;border-top:1px solid #262b5c}.ex li{margin:5px 0}
+.box{border-left:4px solid #7ff0d4;background:#12223a;padding:10px 16px;border-radius:0 12px 12px 0;margin:12px 0}
+.warn{border-color:#ffb703;background:#2a2410}
+@media(max-width:800px){.app{grid-template-columns:minmax(0,1fr)}nav{position:static;height:auto}}</style></head><body><div class="app"><nav><a href="index.html">🏠 Главная</a><a href="basics.html">🧠 Основы с нуля</a><h4>Задание 1 · Битва</h4><a href="t1.html">Обзор</a><a href="t1-html.html">task1.html</a><a href="t1-js.html">task1.js</a><h4>Задание 2 · Канбан</h4><a href="t2.html" class="on">Обзор</a><a href="t2-html.html">task2.html</a><a href="t2-js.html">task2.js</a><h4>Задание 3 · Форма</h4><a href="t3.html">Обзор</a><a href="t3-html.html">task3.html</a><a href="t3-js.html">task3.js</a><h4>Общий стиль</h4><a href="css.html">style.css</a><h4>Подготовка</h4><a href="live.html">⚡ Live coding</a><a href="tips.html">💡 Лайфхаки</a></nav><main><h1>Задание 2 · Канбан-доска</h1><p class="lead">Вариант A: страница строится из массива объектов.</p><h2>Что требовалось</h2><ul><li>≥10 объектов с id и 4+ свойствами разных типов, в HTML только пустые контейнеры</li><li>Одна функция render(), вызывается после каждого изменения</li><li>Поиск/фильтр с сообщением «ничего не найдено»</li><li>Действие, заблокированное правилом, с причиной</li><li>Своя петля для расчёта; делегирование событий</li></ul><h2>Что мы сделали</h2><ul><li>12 карточек, 3 колонки, лимит «In progress» = 3</li><li>Поиск, фильтр по тегу, сортировка по приоритету, прогресс-бар</li><li>Петли: <code>countByStatus</code>, <code>hoursLeft</code>, <code>getTags</code></li></ul><h2>Вопросы на защите</h2><div class="box"><b>Почему сначала меняем массив, а потом render()?</b><br>Страница всегда показывает текущие данные: единственный источник правды: массив.</div><div class="box"><b>Что такое делегирование?</b><br>Один слушатель на <code>#board</code> вместо кнопки на каждой карточке; <code>closest</code> находит кнопку, <code>dataset.id</code> даёт id.</div><div class="box"><b>Как работает блокировка?</b><br>В <code>moveCard</code> проверка <code>countByStatus("doing") &gt;= WIP_LIMIT</code> → сообщение и <code>return</code>.</div></main></div></body></html>

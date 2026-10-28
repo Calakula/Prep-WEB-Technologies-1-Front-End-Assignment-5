@@ -1,0 +1,47 @@
+<!DOCTYPE html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>task2.html · Защита Assignment 5</title><style>*{box-sizing:border-box}body{margin:0;font:16px/1.65 "Segoe UI",system-ui,sans-serif;background:#0d1024;color:#e6e9ff}
+a{color:#8fa0ff}code{background:#232850;padding:1px 6px;border-radius:6px;color:#7ff0d4;font-size:.9em}
+.app{display:grid;grid-template-columns:270px minmax(0,1fr);min-height:100vh}
+nav{background:#12163a;padding:20px 14px;position:sticky;top:0;height:100vh;overflow:auto;border-right:1px solid #262b5c}
+nav h4{margin:18px 8px 6px;font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:#7b84c9}
+nav a{display:block;padding:7px 12px;border-radius:10px;color:#cdd3ff;text-decoration:none}nav a:hover{background:#1e2452}
+nav a.on{background:linear-gradient(90deg,#5468ff,#8a5cff);color:#fff}
+main{padding:32px clamp(16px,4vw,56px);max-width:1000px;overflow-wrap:anywhere}
+h1{font-size:2rem;margin:0 0 6px;background:linear-gradient(90deg,#8fa0ff,#7ff0d4);-webkit-background-clip:text;background-clip:text;color:transparent}
+h2{margin:30px 0 8px;color:#fff}.lead{color:#a9b1e8}
+.hero{padding:30px;border-radius:20px;background:linear-gradient(135deg,#3a4bd8,#8a5cff 60%,#12b5a0);margin-bottom:24px}.hero h1{background:none;color:#fff;-webkit-text-fill-color:#fff}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px}
+.card{background:#161a40;border:1px solid #262b5c;border-radius:16px;padding:16px;transition:.15s}.card:hover{transform:translateY(-3px);border-color:#5468ff}
+.card h3{margin:0 0 6px}.tag{display:inline-block;font-size:.75rem;padding:2px 10px;border-radius:99px;background:#2a3070;color:#bcc5ff;margin:2px}
+.blk{background:#141838;border:1px solid #262b5c;border-radius:16px;margin:20px 0;overflow:hidden}
+.blk h3{margin:0;padding:12px 16px;background:#1a1f4a}.blk small{color:#8d96d8;font-weight:400}
+pre{margin:0;padding:14px 0;overflow-x:auto;font:13px/1.6 Consolas,Menlo,monospace;background:#0a0d20;color:#d7dcff}
+.ln{display:inline-block;width:3.4em;text-align:right;padding-right:14px;color:#566;user-select:none}
+.ex{margin:0;padding:12px 16px 12px 34px;border-top:1px solid #262b5c}.ex li{margin:5px 0}
+.box{border-left:4px solid #7ff0d4;background:#12223a;padding:10px 16px;border-radius:0 12px 12px 0;margin:12px 0}
+.warn{border-color:#ffb703;background:#2a2410}
+@media(max-width:800px){.app{grid-template-columns:minmax(0,1fr)}nav{position:static;height:auto}}</style></head><body><div class="app"><nav><a href="index.html">🏠 Главная</a><a href="basics.html">🧠 Основы с нуля</a><h4>Задание 1 · Битва</h4><a href="t1.html">Обзор</a><a href="t1-html.html">task1.html</a><a href="t1-js.html">task1.js</a><h4>Задание 2 · Канбан</h4><a href="t2.html">Обзор</a><a href="t2-html.html" class="on">task2.html</a><a href="t2-js.html">task2.js</a><h4>Задание 3 · Форма</h4><a href="t3.html">Обзор</a><a href="t3-html.html">task3.html</a><a href="t3-js.html">task3.js</a><h4>Общий стиль</h4><a href="css.html">style.css</a><h4>Подготовка</h4><a href="live.html">⚡ Live coding</a><a href="tips.html">💡 Лайфхаки</a></nav><main><h1>task2.html</h1><p class="lead">Только пустые контейнеры: доска, фильтры, сообщение.</p><section class="blk"><h3>Тело страницы <small>строки 12–36</small></h3><pre><span class="ln">12</span>&lt;main class=&quot;wrap&quot;&gt;
+<span class="ln">13</span>&lt;h1&gt;Kanban board&lt;/h1&gt;
+<span class="ln">14</span>&lt;p class=&quot;lead&quot;&gt;Move cards between columns. The “In progress” column holds at most 3 cards.&lt;/p&gt;
+<span class="ln">15</span>&lt;div class=&quot;toolbar&quot;&gt;
+<span class="ln">16</span>  &lt;label&gt;Search by title &lt;input id=&quot;search&quot; type=&quot;search&quot; placeholder=&quot;e.g. form&quot;&gt;&lt;/label&gt;
+<span class="ln">17</span>  &lt;label&gt;Tag &lt;select id=&quot;filter-tag&quot;&gt;&lt;/select&gt;&lt;/label&gt;
+<span class="ln">18</span>  &lt;label&gt;Sort by priority
+<span class="ln">19</span>    &lt;select id=&quot;sort&quot;&gt;
+<span class="ln">20</span>      &lt;option value=&quot;none&quot;&gt;Default order&lt;/option&gt;
+<span class="ln">21</span>      &lt;option value=&quot;high&quot;&gt;High first&lt;/option&gt;
+<span class="ln">22</span>      &lt;option value=&quot;low&quot;&gt;Low first&lt;/option&gt;
+<span class="ln">23</span>    &lt;/select&gt;
+<span class="ln">24</span>  &lt;/label&gt;
+<span class="ln">25</span>  &lt;button class=&quot;btn btn-secondary&quot; type=&quot;button&quot; id=&quot;reset-filters&quot;&gt;Reset filters&lt;/button&gt;
+<span class="ln">26</span>&lt;/div&gt;
+<span class="ln">27</span>&lt;div class=&quot;progress-box&quot;&gt;
+<span class="ln">28</span>  &lt;p id=&quot;progress-text&quot;&gt;&lt;/p&gt;
+<span class="ln">29</span>  &lt;progress id=&quot;progress&quot; value=&quot;0&quot; max=&quot;1&quot; aria-label=&quot;Finished cards&quot;&gt;&lt;/progress&gt;
+<span class="ln">30</span>&lt;/div&gt;
+<span class="ln">31</span>&lt;p id=&quot;message&quot; class=&quot;message&quot; role=&quot;status&quot; aria-live=&quot;polite&quot;&gt;&lt;/p&gt;
+<span class="ln">32</span>&lt;div id=&quot;empty-board&quot; class=&quot;empty-board&quot; hidden&gt;&lt;/div&gt;
+<span class="ln">33</span>&lt;div id=&quot;board&quot; class=&quot;board&quot;&gt;&lt;/div&gt;
+<span class="ln">34</span>&lt;/main&gt;
+<span class="ln">35</span>&lt;/body&gt;
+<span class="ln">36</span>&lt;/html&gt;
+</pre><ul class="ex"><li><code>#board</code> пустой: колонки и карточки создаёт JS</li><li><code>select#filter-tag</code> пустой: варианты тегов берутся из массива</li><li><code>progress#progress</code> + <code>#progress-text</code>: прогресс</li><li><code>#empty-board</code> скрыт (<code>hidden</code>) до тех пор, пока не нужно «ничего не найдено»</li></ul></section></main></div></body></html>

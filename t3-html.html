@@ -1,0 +1,67 @@
+<!DOCTYPE html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>task3.html · Защита Assignment 5</title><style>*{box-sizing:border-box}body{margin:0;font:16px/1.65 "Segoe UI",system-ui,sans-serif;background:#0d1024;color:#e6e9ff}
+a{color:#8fa0ff}code{background:#232850;padding:1px 6px;border-radius:6px;color:#7ff0d4;font-size:.9em}
+.app{display:grid;grid-template-columns:270px minmax(0,1fr);min-height:100vh}
+nav{background:#12163a;padding:20px 14px;position:sticky;top:0;height:100vh;overflow:auto;border-right:1px solid #262b5c}
+nav h4{margin:18px 8px 6px;font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:#7b84c9}
+nav a{display:block;padding:7px 12px;border-radius:10px;color:#cdd3ff;text-decoration:none}nav a:hover{background:#1e2452}
+nav a.on{background:linear-gradient(90deg,#5468ff,#8a5cff);color:#fff}
+main{padding:32px clamp(16px,4vw,56px);max-width:1000px;overflow-wrap:anywhere}
+h1{font-size:2rem;margin:0 0 6px;background:linear-gradient(90deg,#8fa0ff,#7ff0d4);-webkit-background-clip:text;background-clip:text;color:transparent}
+h2{margin:30px 0 8px;color:#fff}.lead{color:#a9b1e8}
+.hero{padding:30px;border-radius:20px;background:linear-gradient(135deg,#3a4bd8,#8a5cff 60%,#12b5a0);margin-bottom:24px}.hero h1{background:none;color:#fff;-webkit-text-fill-color:#fff}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px}
+.card{background:#161a40;border:1px solid #262b5c;border-radius:16px;padding:16px;transition:.15s}.card:hover{transform:translateY(-3px);border-color:#5468ff}
+.card h3{margin:0 0 6px}.tag{display:inline-block;font-size:.75rem;padding:2px 10px;border-radius:99px;background:#2a3070;color:#bcc5ff;margin:2px}
+.blk{background:#141838;border:1px solid #262b5c;border-radius:16px;margin:20px 0;overflow:hidden}
+.blk h3{margin:0;padding:12px 16px;background:#1a1f4a}.blk small{color:#8d96d8;font-weight:400}
+pre{margin:0;padding:14px 0;overflow-x:auto;font:13px/1.6 Consolas,Menlo,monospace;background:#0a0d20;color:#d7dcff}
+.ln{display:inline-block;width:3.4em;text-align:right;padding-right:14px;color:#566;user-select:none}
+.ex{margin:0;padding:12px 16px 12px 34px;border-top:1px solid #262b5c}.ex li{margin:5px 0}
+.box{border-left:4px solid #7ff0d4;background:#12223a;padding:10px 16px;border-radius:0 12px 12px 0;margin:12px 0}
+.warn{border-color:#ffb703;background:#2a2410}
+@media(max-width:800px){.app{grid-template-columns:minmax(0,1fr)}nav{position:static;height:auto}}</style></head><body><div class="app"><nav><a href="index.html">🏠 Главная</a><a href="basics.html">🧠 Основы с нуля</a><h4>Задание 1 · Битва</h4><a href="t1.html">Обзор</a><a href="t1-html.html">task1.html</a><a href="t1-js.html">task1.js</a><h4>Задание 2 · Канбан</h4><a href="t2.html">Обзор</a><a href="t2-html.html">task2.html</a><a href="t2-js.html">task2.js</a><h4>Задание 3 · Форма</h4><a href="t3.html">Обзор</a><a href="t3-html.html" class="on">task3.html</a><a href="t3-js.html">task3.js</a><h4>Общий стиль</h4><a href="css.html">style.css</a><h4>Подготовка</h4><a href="live.html">⚡ Live coding</a><a href="tips.html">💡 Лайфхаки</a></nav><main><h1>task3.html</h1><p class="lead">Форма с пустыми select и подписями ошибок.</p><section class="blk"><h3>Тело страницы <small>строки 12–56</small></h3><pre><span class="ln">12</span>&lt;main class=&quot;wrap&quot;&gt;
+<span class="ln">13</span>&lt;h1&gt;Ticket builder&lt;/h1&gt;
+<span class="ln">14</span>&lt;p class=&quot;lead&quot;&gt;Fill in the form. The ticket preview updates while you type.&lt;/p&gt;
+<span class="ln">15</span>&lt;div class=&quot;layout&quot;&gt;
+<span class="ln">16</span>  &lt;form id=&quot;ticket-form&quot; class=&quot;panel&quot; novalidate&gt;
+<span class="ln">17</span>    &lt;div id=&quot;summary&quot; class=&quot;summary&quot; role=&quot;alert&quot; tabindex=&quot;-1&quot; hidden&gt;&lt;/div&gt;
+<span class="ln">18</span>    &lt;div class=&quot;field&quot;&gt;&lt;label for=&quot;f-event&quot;&gt;Event&lt;/label&gt;
+<span class="ln">19</span>      &lt;select id=&quot;f-event&quot; name=&quot;event&quot; required aria-describedby=&quot;err-event&quot;&gt;&lt;/select&gt;
+<span class="ln">20</span>      &lt;p class=&quot;error&quot; id=&quot;err-event&quot;&gt;&lt;/p&gt;&lt;/div&gt;
+<span class="ln">21</span>    &lt;div class=&quot;field&quot;&gt;&lt;label for=&quot;f-date&quot;&gt;Date&lt;/label&gt;
+<span class="ln">22</span>      &lt;input id=&quot;f-date&quot; name=&quot;date&quot; type=&quot;date&quot; required aria-describedby=&quot;hint-date err-date&quot;&gt;
+<span class="ln">23</span>      &lt;p class=&quot;hint&quot; id=&quot;hint-date&quot;&gt;Choose an event to see its dates.&lt;/p&gt;
+<span class="ln">24</span>      &lt;p class=&quot;error&quot; id=&quot;err-date&quot;&gt;&lt;/p&gt;&lt;/div&gt;
+<span class="ln">25</span>    &lt;div class=&quot;field&quot;&gt;&lt;label for=&quot;f-type&quot;&gt;Ticket type&lt;/label&gt;
+<span class="ln">26</span>      &lt;select id=&quot;f-type&quot; name=&quot;type&quot; required aria-describedby=&quot;err-type&quot;&gt;&lt;/select&gt;
+<span class="ln">27</span>      &lt;p class=&quot;error&quot; id=&quot;err-type&quot;&gt;&lt;/p&gt;&lt;/div&gt;
+<span class="ln">28</span>    &lt;div class=&quot;field&quot;&gt;&lt;label for=&quot;f-quantity&quot;&gt;Quantity&lt;/label&gt;
+<span class="ln">29</span>      &lt;input id=&quot;f-quantity&quot; name=&quot;quantity&quot; type=&quot;number&quot; min=&quot;1&quot; max=&quot;10&quot; step=&quot;1&quot; inputmode=&quot;numeric&quot; required aria-describedby=&quot;hint-quantity err-quantity&quot;&gt;
+<span class="ln">30</span>      &lt;p class=&quot;hint&quot; id=&quot;hint-quantity&quot;&gt;From 1 to 10 tickets.&lt;/p&gt;
+<span class="ln">31</span>      &lt;p class=&quot;error&quot; id=&quot;err-quantity&quot;&gt;&lt;/p&gt;&lt;/div&gt;
+<span class="ln">32</span>    &lt;div class=&quot;field&quot;&gt;&lt;label for=&quot;f-fullName&quot;&gt;Full name&lt;/label&gt;
+<span class="ln">33</span>      &lt;input id=&quot;f-fullName&quot; name=&quot;fullName&quot; type=&quot;text&quot; required minlength=&quot;5&quot; maxlength=&quot;40&quot; autocomplete=&quot;name&quot; aria-describedby=&quot;err-fullName&quot;&gt;
+<span class="ln">34</span>      &lt;p class=&quot;error&quot; id=&quot;err-fullName&quot;&gt;&lt;/p&gt;&lt;/div&gt;
+<span class="ln">35</span>    &lt;div class=&quot;field&quot;&gt;&lt;label for=&quot;f-email&quot;&gt;Email&lt;/label&gt;
+<span class="ln">36</span>      &lt;input id=&quot;f-email&quot; name=&quot;email&quot; type=&quot;email&quot; required autocomplete=&quot;email&quot; aria-describedby=&quot;err-email&quot;&gt;
+<span class="ln">37</span>      &lt;p class=&quot;error&quot; id=&quot;err-email&quot;&gt;&lt;/p&gt;&lt;/div&gt;
+<span class="ln">38</span>    &lt;div class=&quot;field&quot;&gt;&lt;label for=&quot;f-promo&quot;&gt;Promo code (optional)&lt;/label&gt;
+<span class="ln">39</span>      &lt;input id=&quot;f-promo&quot; name=&quot;promo&quot; type=&quot;text&quot; maxlength=&quot;20&quot; pattern=&quot;[A-Za-z0-9]*&quot; autocomplete=&quot;off&quot; aria-describedby=&quot;err-promo&quot;&gt;
+<span class="ln">40</span>      &lt;p class=&quot;error&quot; id=&quot;err-promo&quot;&gt;&lt;/p&gt;&lt;/div&gt;
+<span class="ln">41</span>    &lt;div class=&quot;form-actions&quot;&gt;
+<span class="ln">42</span>      &lt;button class=&quot;btn&quot; type=&quot;submit&quot;&gt;Book tickets&lt;/button&gt;
+<span class="ln">43</span>      &lt;button class=&quot;btn btn-secondary&quot; type=&quot;reset&quot; id=&quot;reset-btn&quot;&gt;Clear form&lt;/button&gt;
+<span class="ln">44</span>    &lt;/div&gt;
+<span class="ln">45</span>  &lt;/form&gt;
+<span class="ln">46</span>  &lt;aside class=&quot;preview&quot; aria-label=&quot;Ticket preview&quot;&gt;
+<span class="ln">47</span>    &lt;div class=&quot;panel&quot;&gt;
+<span class="ln">48</span>      &lt;h2&gt;Live preview&lt;/h2&gt;
+<span class="ln">49</span>      &lt;div class=&quot;ticket&quot; id=&quot;preview&quot;&gt;&lt;/div&gt;
+<span class="ln">50</span>    &lt;/div&gt;
+<span class="ln">51</span>    &lt;div id=&quot;result&quot; aria-live=&quot;polite&quot;&gt;&lt;/div&gt;
+<span class="ln">52</span>  &lt;/aside&gt;
+<span class="ln">53</span>&lt;/div&gt;
+<span class="ln">54</span>&lt;/main&gt;
+<span class="ln">55</span>&lt;/body&gt;
+<span class="ln">56</span>&lt;/html&gt;
+</pre><ul class="ex"><li><code>novalidate</code> в разметке + <code>noValidate</code> в JS: свои сообщения</li><li><code>required, min, max, minlength, pattern</code>: правила, которые умеют сами атрибуты</li><li><code>aria-describedby</code> связывает поле с подсказкой и ошибкой для экранного диктора</li><li><code>p.error</code> пустой при загрузке: ошибок нет</li><li><code>#summary</code> скрыт; <code>#preview</code> и <code>#result</code>: сюда пишет JS</li></ul></section></main></div></body></html>

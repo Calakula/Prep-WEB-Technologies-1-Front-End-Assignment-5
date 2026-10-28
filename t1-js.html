@@ -1,0 +1,237 @@
+<!DOCTYPE html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>task1.js · Защита Assignment 5</title><style>*{box-sizing:border-box}body{margin:0;font:16px/1.65 "Segoe UI",system-ui,sans-serif;background:#0d1024;color:#e6e9ff}
+a{color:#8fa0ff}code{background:#232850;padding:1px 6px;border-radius:6px;color:#7ff0d4;font-size:.9em}
+.app{display:grid;grid-template-columns:270px minmax(0,1fr);min-height:100vh}
+nav{background:#12163a;padding:20px 14px;position:sticky;top:0;height:100vh;overflow:auto;border-right:1px solid #262b5c}
+nav h4{margin:18px 8px 6px;font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:#7b84c9}
+nav a{display:block;padding:7px 12px;border-radius:10px;color:#cdd3ff;text-decoration:none}nav a:hover{background:#1e2452}
+nav a.on{background:linear-gradient(90deg,#5468ff,#8a5cff);color:#fff}
+main{padding:32px clamp(16px,4vw,56px);max-width:1000px;overflow-wrap:anywhere}
+h1{font-size:2rem;margin:0 0 6px;background:linear-gradient(90deg,#8fa0ff,#7ff0d4);-webkit-background-clip:text;background-clip:text;color:transparent}
+h2{margin:30px 0 8px;color:#fff}.lead{color:#a9b1e8}
+.hero{padding:30px;border-radius:20px;background:linear-gradient(135deg,#3a4bd8,#8a5cff 60%,#12b5a0);margin-bottom:24px}.hero h1{background:none;color:#fff;-webkit-text-fill-color:#fff}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px}
+.card{background:#161a40;border:1px solid #262b5c;border-radius:16px;padding:16px;transition:.15s}.card:hover{transform:translateY(-3px);border-color:#5468ff}
+.card h3{margin:0 0 6px}.tag{display:inline-block;font-size:.75rem;padding:2px 10px;border-radius:99px;background:#2a3070;color:#bcc5ff;margin:2px}
+.blk{background:#141838;border:1px solid #262b5c;border-radius:16px;margin:20px 0;overflow:hidden}
+.blk h3{margin:0;padding:12px 16px;background:#1a1f4a}.blk small{color:#8d96d8;font-weight:400}
+pre{margin:0;padding:14px 0;overflow-x:auto;font:13px/1.6 Consolas,Menlo,monospace;background:#0a0d20;color:#d7dcff}
+.ln{display:inline-block;width:3.4em;text-align:right;padding-right:14px;color:#566;user-select:none}
+.ex{margin:0;padding:12px 16px 12px 34px;border-top:1px solid #262b5c}.ex li{margin:5px 0}
+.box{border-left:4px solid #7ff0d4;background:#12223a;padding:10px 16px;border-radius:0 12px 12px 0;margin:12px 0}
+.warn{border-color:#ffb703;background:#2a2410}
+@media(max-width:800px){.app{grid-template-columns:minmax(0,1fr)}nav{position:static;height:auto}}</style></head><body><div class="app"><nav><a href="index.html">🏠 Главная</a><a href="basics.html">🧠 Основы с нуля</a><h4>Задание 1 · Битва</h4><a href="t1.html">Обзор</a><a href="t1-html.html">task1.html</a><a href="t1-js.html" class="on">task1.js</a><h4>Задание 2 · Канбан</h4><a href="t2.html">Обзор</a><a href="t2-html.html">task2.html</a><a href="t2-js.html">task2.js</a><h4>Задание 3 · Форма</h4><a href="t3.html">Обзор</a><a href="t3-html.html">task3.html</a><a href="t3-js.html">task3.js</a><h4>Общий стиль</h4><a href="css.html">style.css</a><h4>Подготовка</h4><a href="live.html">⚡ Live coding</a><a href="tips.html">💡 Лайфхаки</a></nav><main><h1>task1.js</h1><p class="lead">Вся логика игры. Читай блоки сверху вниз.</p><section class="blk"><h3>1. Константы <small>строки 1–14</small></h3><pre><span class="ln">1</span>&#x27;use strict&#x27;;
+<span class="ln">2</span>
+<span class="ln">3</span>// ===== Game constants (change them here, the whole game follows) =====
+<span class="ln">4</span>const MAX_HP = 100;
+<span class="ln">5</span>const HERO_MIN_DAMAGE = 8;
+<span class="ln">6</span>const HERO_MAX_DAMAGE = 15;
+<span class="ln">7</span>const ENEMY_MIN_DAMAGE = 5;
+<span class="ln">8</span>const ENEMY_MAX_DAMAGE = 14;
+<span class="ln">9</span>const HEAL_AMOUNT = 20;
+<span class="ln">10</span>const MAX_HEALS = 3;
+<span class="ln">11</span>const CRIT_CHANCE = 0.1;      // 10%
+<span class="ln">12</span>const CRIT_MULTIPLIER = 2;
+<span class="ln">13</span>const LOG_SIZE = 5;
+<span class="ln">14</span>const LOW_HP_PERCENT = 30;    // progress bar turns red at or below this value
+</pre><ul class="ex"><li><code>'use strict'</code>: строгий режим, ловит глупые ошибки</li><li>Все числа игры здесь: поменяешь здесь, и игра подстроится (так просит задание)</li><li><code>CRIT_CHANCE = 0.1</code>: 10%</li></ul></section><section class="blk"><h3>2. Ссылки на элементы <small>строки 16–31</small></h3><pre><span class="ln">16</span>// ===== DOM references =====
+<span class="ln">17</span>const els = {
+<span class="ln">18</span>  heroBar: document.getElementById(&#x27;hero-bar&#x27;),
+<span class="ln">19</span>  heroHp: document.getElementById(&#x27;hero-hp&#x27;),
+<span class="ln">20</span>  heroCard: document.getElementById(&#x27;hero-card&#x27;),
+<span class="ln">21</span>  heroDefending: document.getElementById(&#x27;hero-defending&#x27;),
+<span class="ln">22</span>  enemyBar: document.getElementById(&#x27;enemy-bar&#x27;),
+<span class="ln">23</span>  enemyHp: document.getElementById(&#x27;enemy-hp&#x27;),
+<span class="ln">24</span>  enemyCard: document.getElementById(&#x27;enemy-card&#x27;),
+<span class="ln">25</span>  message: document.getElementById(&#x27;message&#x27;),
+<span class="ln">26</span>  result: document.getElementById(&#x27;result&#x27;),
+<span class="ln">27</span>  actions: document.getElementById(&#x27;actions&#x27;),
+<span class="ln">28</span>  healBtn: document.getElementById(&#x27;heal-btn&#x27;),
+<span class="ln">29</span>  restart: document.getElementById(&#x27;restart&#x27;),
+<span class="ln">30</span>  log: document.getElementById(&#x27;log&#x27;),
+<span class="ln">31</span>};
+</pre><ul class="ex"><li>Один раз находим элементы и кладём в объект <code>els</code>: так не надо искать при каждом ходе</li></ul></section><section class="blk"><h3>3. Состояние <small>строки 33–44</small></h3><pre><span class="ln">33</span>// ===== Game state =====
+<span class="ln">34</span>const state = {
+<span class="ln">35</span>  heroHp: MAX_HP,
+<span class="ln">36</span>  enemyHp: MAX_HP,
+<span class="ln">37</span>  healsLeft: MAX_HEALS,
+<span class="ln">38</span>  defending: false,
+<span class="ln">39</span>  over: false,
+<span class="ln">40</span>  outcome: &#x27;continue&#x27;,
+<span class="ln">41</span>  message: &#x27;&#x27;,
+<span class="ln">42</span>  messageType: &#x27;&#x27;,
+<span class="ln">43</span>  log: [],
+<span class="ln">44</span>};
+</pre><ul class="ex"><li><code>state</code>: вся «память» игры: HP, лечения, защита, конец, лог</li><li>Идея: сначала меняем state, потом рисуем</li></ul></section><section class="blk"><h3>4. Помощники <small>строки 46–77</small></h3><pre><span class="ln">46</span>// Whole number from min to max, both included
+<span class="ln">47</span>function randomInt(min, max) {
+<span class="ln">48</span>  return Math.floor(Math.random() * (max - min + 1)) + min;
+<span class="ln">49</span>}
+<span class="ln">50</span>
+<span class="ln">51</span>function rollCrit() {
+<span class="ln">52</span>  return Math.random() &lt; CRIT_CHANCE;
+<span class="ln">53</span>}
+<span class="ln">54</span>
+<span class="ln">55</span>function addLog(text) {
+<span class="ln">56</span>  state.log.unshift(text);              // newest first
+<span class="ln">57</span>  if (state.log.length &gt; LOG_SIZE) {
+<span class="ln">58</span>    state.log.length = LOG_SIZE;        // keep only the last N actions
+<span class="ln">59</span>  }
+<span class="ln">60</span>}
+<span class="ln">61</span>
+<span class="ln">62</span>function setMessage(text, type) {
+<span class="ln">63</span>  state.message = text;
+<span class="ln">64</span>  state.messageType = type;
+<span class="ln">65</span>}
+<span class="ln">66</span>
+<span class="ln">67</span>// A rejected move changes nothing except the message
+<span class="ln">68</span>function reject(text) {
+<span class="ln">69</span>  setMessage(text, &#x27;error&#x27;);
+<span class="ln">70</span>  render();
+<span class="ln">71</span>}
+<span class="ln">72</span>
+<span class="ln">73</span>function getOutcome() {
+<span class="ln">74</span>  if (state.enemyHp === 0) return &#x27;win&#x27;;
+<span class="ln">75</span>  if (state.heroHp === 0) return &#x27;lose&#x27;;
+<span class="ln">76</span>  return &#x27;continue&#x27;;
+<span class="ln">77</span>}
+</pre><ul class="ex"><li><code>randomInt</code>: целое от min до max включительно</li><li><code>rollCrit</code>: <code>Math.random() &lt; 0.1</code> верно в 10% случаев</li><li><code>addLog</code>: <code>unshift</code> кладёт в начало, лишнее обрезаем до LOG_SIZE</li><li><code>reject</code>: ставит сообщение об ошибке и рисует, больше ничего не меняет</li><li><code>getOutcome</code>: win / lose / continue через <code>===</code></li></ul></section><section class="blk"><h3>5. Действия героя и врага <small>строки 79–111</small></h3><pre><span class="ln">79</span>function heroAttack() {
+<span class="ln">80</span>  let damage = randomInt(HERO_MIN_DAMAGE, HERO_MAX_DAMAGE);
+<span class="ln">81</span>  const crit = rollCrit();
+<span class="ln">82</span>  if (crit) damage *= CRIT_MULTIPLIER;
+<span class="ln">83</span>  state.enemyHp = Math.max(0, state.enemyHp - damage);
+<span class="ln">84</span>  addLog(`You hit the enemy for ${damage}${crit ? &#x27; (CRITICAL HIT!)&#x27; : &#x27;&#x27;}.`);
+<span class="ln">85</span>}
+<span class="ln">86</span>
+<span class="ln">87</span>function heroDefend() {
+<span class="ln">88</span>  state.defending = true;
+<span class="ln">89</span>  addLog(&#x27;You raise your shield: the next hit will be halved.&#x27;);
+<span class="ln">90</span>}
+<span class="ln">91</span>
+<span class="ln">92</span>function heroHeal() {
+<span class="ln">93</span>  const before = state.heroHp;
+<span class="ln">94</span>  state.heroHp = Math.min(MAX_HP, state.heroHp + HEAL_AMOUNT);
+<span class="ln">95</span>  state.healsLeft -= 1;
+<span class="ln">96</span>  addLog(`You heal ${state.heroHp - before} HP (${state.healsLeft} heals left).`);
+<span class="ln">97</span>}
+<span class="ln">98</span>
+<span class="ln">99</span>function enemyAttack() {
+<span class="ln">100</span>  let damage = randomInt(ENEMY_MIN_DAMAGE, ENEMY_MAX_DAMAGE);
+<span class="ln">101</span>  const crit = rollCrit();
+<span class="ln">102</span>  if (crit) damage *= CRIT_MULTIPLIER;
+<span class="ln">103</span>  let note = crit ? &#x27; (CRITICAL HIT!)&#x27; : &#x27;&#x27;;
+<span class="ln">104</span>  if (state.defending) {
+<span class="ln">105</span>    damage = Math.floor(damage / 2);
+<span class="ln">106</span>    state.defending = false;            // defence is used up by one hit
+<span class="ln">107</span>    note += &#x27; (blocked by shield)&#x27;;
+<span class="ln">108</span>  }
+<span class="ln">109</span>  state.heroHp = Math.max(0, state.heroHp - damage);
+<span class="ln">110</span>  addLog(`The enemy hits you for ${damage}${note}.`);
+<span class="ln">111</span>}
+</pre><ul class="ex"><li>Урон = random; при крите умножаем на 2</li><li><code>Math.max(0, ...)</code>: HP не уходит ниже нуля</li><li>В <code>enemyAttack</code> защита делит урон пополам <code>Math.floor(damage/2)</code> и сразу выключается</li><li><code>Math.min(MAX_HP, ...)</code> в лечении: выше максимума не лечимся</li></ul></section><section class="blk"><h3>6. Главная функция takeTurn <small>строки 113–156</small></h3><pre><span class="ln">113</span>function takeTurn(action) {
+<span class="ln">114</span>  // --- validation: nothing changes if the move is not allowed ---
+<span class="ln">115</span>  if (state.over) {
+<span class="ln">116</span>    reject(&#x27;The battle is over. Press &quot;New battle&quot; to play again.&#x27;);
+<span class="ln">117</span>    return;
+<span class="ln">118</span>  }
+<span class="ln">119</span>  if (action !== &#x27;attack&#x27; &amp;&amp; action !== &#x27;defend&#x27; &amp;&amp; action !== &#x27;heal&#x27;) {
+<span class="ln">120</span>    reject(&#x27;Unknown move.&#x27;);
+<span class="ln">121</span>    return;
+<span class="ln">122</span>  }
+<span class="ln">123</span>  if (action === &#x27;defend&#x27; &amp;&amp; state.defending) {
+<span class="ln">124</span>    reject(&#x27;You are already defending. Choose another move.&#x27;);
+<span class="ln">125</span>    return;
+<span class="ln">126</span>  }
+<span class="ln">127</span>  if (action === &#x27;heal&#x27; &amp;&amp; state.healsLeft === 0) {
+<span class="ln">128</span>    reject(&#x27;No heals left.&#x27;);
+<span class="ln">129</span>    return;
+<span class="ln">130</span>  }
+<span class="ln">131</span>  if (action === &#x27;heal&#x27; &amp;&amp; state.heroHp === MAX_HP) {
+<span class="ln">132</span>    reject(&#x27;Your HP is already full.&#x27;);
+<span class="ln">133</span>    return;
+<span class="ln">134</span>  }
+<span class="ln">135</span>
+<span class="ln">136</span>  // --- hero move ---
+<span class="ln">137</span>  if (action === &#x27;attack&#x27;) heroAttack();
+<span class="ln">138</span>  else if (action === &#x27;defend&#x27;) heroDefend();
+<span class="ln">139</span>  else heroHeal();
+<span class="ln">140</span>
+<span class="ln">141</span>  // --- enemy answers only if still alive ---
+<span class="ln">142</span>  state.outcome = getOutcome();
+<span class="ln">143</span>  if (state.outcome === &#x27;continue&#x27;) {
+<span class="ln">144</span>    enemyAttack();
+<span class="ln">145</span>    state.outcome = getOutcome();
+<span class="ln">146</span>  }
+<span class="ln">147</span>
+<span class="ln">148</span>  state.over = state.outcome === &#x27;win&#x27; || state.outcome === &#x27;lose&#x27;;
+<span class="ln">149</span>  if (state.over) {
+<span class="ln">150</span>    setMessage(&#x27;&#x27;, &#x27;&#x27;);
+<span class="ln">151</span>    addLog(state.outcome === &#x27;win&#x27; ? &#x27;The enemy is defeated!&#x27; : &#x27;You were defeated...&#x27;);
+<span class="ln">152</span>  } else {
+<span class="ln">153</span>    setMessage(&#x27;&#x27;, &#x27;&#x27;);
+<span class="ln">154</span>  }
+<span class="ln">155</span>  render();
+<span class="ln">156</span>}
+</pre><ul class="ex"><li>Сначала блок проверок: каждая с <code>return</code>, поэтому ход отклоняется до изменений</li><li>Потом ход героя, затем ответ врага, только если он жив</li><li><code>state.over</code> = победа <code>||</code> поражение</li></ul></section><section class="blk"><h3>7. Новая игра <small>строки 158–169</small></h3><pre><span class="ln">158</span>function newGame() {
+<span class="ln">159</span>  state.heroHp = MAX_HP;
+<span class="ln">160</span>  state.enemyHp = MAX_HP;
+<span class="ln">161</span>  state.healsLeft = MAX_HEALS;
+<span class="ln">162</span>  state.defending = false;
+<span class="ln">163</span>  state.over = false;
+<span class="ln">164</span>  state.outcome = &#x27;continue&#x27;;
+<span class="ln">165</span>  state.log = [];
+<span class="ln">166</span>  setMessage(&#x27;A new battle begins. Choose your move.&#x27;, &#x27;ok&#x27;);
+<span class="ln">167</span>  addLog(&#x27;The battle begins!&#x27;);
+<span class="ln">168</span>  render();
+<span class="ln">169</span>}
+</pre><ul class="ex"><li>Сбрасывает все поля state: страница не перезагружается</li></ul></section><section class="blk"><h3>8. Рисование (render) <small>строки 171–214</small></h3><pre><span class="ln">171</span>function renderBar(bar, textEl, hp) {
+<span class="ln">172</span>  bar.max = MAX_HP;
+<span class="ln">173</span>  bar.value = hp;
+<span class="ln">174</span>  bar.classList.toggle(&#x27;low&#x27;, (hp / MAX_HP) * 100 &lt;= LOW_HP_PERCENT);
+<span class="ln">175</span>  textEl.textContent = `${hp} / ${MAX_HP} HP`;
+<span class="ln">176</span>}
+<span class="ln">177</span>
+<span class="ln">178</span>function render() {
+<span class="ln">179</span>  renderBar(els.heroBar, els.heroHp, state.heroHp);
+<span class="ln">180</span>  renderBar(els.enemyBar, els.enemyHp, state.enemyHp);
+<span class="ln">181</span>
+<span class="ln">182</span>  els.heroDefending.hidden = !state.defending;
+<span class="ln">183</span>  els.heroCard.classList.toggle(&#x27;is-defending&#x27;, state.defending);
+<span class="ln">184</span>  els.heroCard.classList.toggle(&#x27;is-dead&#x27;, state.outcome === &#x27;lose&#x27;);
+<span class="ln">185</span>  els.enemyCard.classList.toggle(&#x27;is-dead&#x27;, state.outcome === &#x27;win&#x27;);
+<span class="ln">186</span>
+<span class="ln">187</span>  els.message.textContent = state.message;
+<span class="ln">188</span>  els.message.className = &#x27;message&#x27; + (state.messageType ? &#x27; &#x27; + state.messageType : &#x27;&#x27;);
+<span class="ln">189</span>
+<span class="ln">190</span>  els.healBtn.textContent = `Heal +${HEAL_AMOUNT} (${state.healsLeft} left)`;
+<span class="ln">191</span>  for (const btn of els.actions.querySelectorAll(&#x27;button[data-action]&#x27;)) {
+<span class="ln">192</span>    btn.disabled = state.over;
+<span class="ln">193</span>  }
+<span class="ln">194</span>
+<span class="ln">195</span>  els.result.hidden = !state.over;
+<span class="ln">196</span>  els.result.classList.toggle(&#x27;win&#x27;, state.outcome === &#x27;win&#x27;);
+<span class="ln">197</span>  els.result.classList.toggle(&#x27;loss&#x27;, state.outcome === &#x27;lose&#x27;);
+<span class="ln">198</span>  els.result.textContent = state.outcome === &#x27;win&#x27;
+<span class="ln">199</span>    ? &#x27;Victory! You defeated the enemy.&#x27;
+<span class="ln">200</span>    : &#x27;Defeat. The enemy was stronger this time.&#x27;;
+<span class="ln">201</span>
+<span class="ln">202</span>  els.log.replaceChildren();
+<span class="ln">203</span>  if (state.log.length === 0) {
+<span class="ln">204</span>    const li = document.createElement(&#x27;li&#x27;);
+<span class="ln">205</span>    li.className = &#x27;empty&#x27;;
+<span class="ln">206</span>    li.textContent = &#x27;No actions yet.&#x27;;
+<span class="ln">207</span>    els.log.append(li);
+<span class="ln">208</span>  }
+<span class="ln">209</span>  for (const entry of state.log) {
+<span class="ln">210</span>    const li = document.createElement(&#x27;li&#x27;);
+<span class="ln">211</span>    li.textContent = entry;
+<span class="ln">212</span>    els.log.append(li);
+<span class="ln">213</span>  }
+<span class="ln">214</span>}
+</pre><ul class="ex"><li><code>progress.value = hp</code>: полоса обновляется</li><li><code>classList.toggle</code>: JS только включает CSS-классы, без inline-стилей</li><li><code>btn.disabled = state.over</code>: после конца кнопки неактивны</li><li><code>replaceChildren()</code> очищает лог, затем создаём <code>li</code> заново</li></ul></section><section class="blk"><h3>9. События и старт <small>строки 216–223</small></h3><pre><span class="ln">216</span>els.actions.addEventListener(&#x27;click&#x27;, (event) =&gt; {
+<span class="ln">217</span>  const btn = event.target.closest(&#x27;button[data-action]&#x27;);
+<span class="ln">218</span>  if (!btn) return;
+<span class="ln">219</span>  takeTurn(btn.dataset.action);
+<span class="ln">220</span>});
+<span class="ln">221</span>els.restart.addEventListener(&#x27;click&#x27;, newGame);
+<span class="ln">222</span>
+<span class="ln">223</span>newGame();
+</pre><ul class="ex"><li>Один слушатель на контейнер кнопок: <code>closest</code> + <code>dataset.action</code> говорят, какой ход</li><li>Последняя строка <code>newGame()</code> запускает игру</li></ul></section></main></div></body></html>
